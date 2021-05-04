@@ -16,8 +16,8 @@ services:
     depends_on:
       - php
       - postgres
-#    environment:
-#      TZ: ${WORKSPACE_TIMEZONE}
+    environment:
+      TZ: ${WORKSPACE_TIMEZONE}
     networks:
       - backend
 
@@ -29,8 +29,8 @@ services:
     volumes:
       - /var/data/dungeon_wallet/redis/data:/var/lib/redis
       - ./.docker/redis/redis/conf:/usr/local/etc/redis/redis.conf
-#    environment:
-#      TZ: ${WORKSPACE_TIMEZONE}
+    environment:
+      TZ: ${WORKSPACE_TIMEZONE}
     networks:
       - backend
 
@@ -42,10 +42,10 @@ services:
     ports:
       - "54327:5432"
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-#      TZ: ${WORKSPACE_TIMEZONE}
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      TZ: ${WORKSPACE_TIMEZONE}
     networks:
         - backend
     container_name: postgres
@@ -55,8 +55,8 @@ services:
       context: ./.docker/php
       args:
         DOCKER_PHP_VERSION: '8.0'
-#        DOCKER_PHP_ENABLE_XDEBUG: ${DOCKER_PHP_ENABLE_XDEBUG}
-#        TZ: ${WORKSPACE_TIMEZONE}
+        DOCKER_PHP_ENABLE_XDEBUG: ${DOCKER_PHP_ENABLE_XDEBUG}
+        TZ: ${WORKSPACE_TIMEZONE}
     working_dir: /opt/app
     container_name: dungeon_php
     volumes:
