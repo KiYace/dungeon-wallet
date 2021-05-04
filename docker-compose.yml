@@ -1,0 +1,48 @@
+version: '3.7'
+
+services:
+  nginx:
+    image: nginx
+    container_name: dungeon_nginx
+    ports:
+      - 5505:80
+    depends_on:
+      - php_fpm
+    env_file:
+      - .env
+    environment:
+      - "PHP_FPM_URL=php_fpm:9000"
+      - "APP_HOST=api.develop"
+      - "ROOT_PATH=/opt/app/public"
+    volumes:
+      - .:/opt/app
+    networks:
+      - dungeon_wallet
+
+  php_fpm:
+    build:
+      context: ./docker/php_fpm
+    container_name: dungeon_php
+    volumes:
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+      - .:/opt/app
+    networks:
+      - dungeon_wallet
+
+  database:
+    image: bryceharrington/postgresql-13
+    env_file:
+      - .env
+    environment:
+      - "POSTGRES_DB=${DB_DATABASE}"
+      - "POSTGRES_USER=${DB_USERNAME}"
+      - "POSTGRES_PASSWORD=${DB_PASSWORD}"
+    ports:
+    - 54310:5432
+    volumes:
+      - /var/data/dungeon_wallet/database:/var/lib/postgresql
+    networks:
+      - dungeon_wallet
+
+networks:
+  dungeon_wallet:
