@@ -65,15 +65,14 @@ RUN apk add --update --no-cache icu-libs \
 RUN php -m && \
     docker-php-ext-configure bcmath --enable-bcmath && \
     docker-php-ext-configure gd \
-      --with-freetype-dir=/usr/include/ \
-      --with-jpeg-dir=/usr/include/ \
-      --with-png-dir=/usr/include/ && \
+      --with-jpeg \
+      --with-freetype && \
     docker-php-ext-configure gettext && \
     docker-php-ext-configure intl --enable-intl && \
     docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-configure pcntl --enable-pcntl && \
     docker-php-ext-configure soap && \
-    docker-php-ext-configure zip --enable-zip --with-libzip && \
+    docker-php-ext-configure zip && \
     docker-php-ext-install exif \
         mysqli \
         opcache \
@@ -126,6 +125,6 @@ USER root
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 
-USER www-data:www-data
+USER 1000:1000
 
-WORKDIR /var/www/
+WORKDIR /opt/app
