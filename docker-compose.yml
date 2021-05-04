@@ -1,48 +1,70 @@
 version: '3.7'
 
+networks:
+  backend:
+
 services:
   nginx:
-    image: nginx
+    image: nginx:stable-alpine
     container_name: dungeon_nginx
     ports:
-      - 5505:80
-    depends_on:
-      - php_fpm
-    env_file:
-      - .env
-    environment:
-      - "PHP_FPM_URL=php_fpm:9000"
-      - "APP_HOST=api.develop"
-      - "ROOT_PATH=/opt/app/public"
+      - "5505:80"
     volumes:
-      - .:/opt/app
+      - ./:/opt/app
+      - ./.docker/nginx:/etc/nginx/conf.d
+      - /var/logs/dungeon_wallet/nginx:/var/log/nginx/
+    depends_on:
+      - php
+      - postgres
+#    environment:
+#      TZ: ${WORKSPACE_TIMEZONE}
     networks:
-      - dungeon_wallet
+      - backend
 
-  php_fpm:
+  redis:
+    image: redis:latest
+    ports:
+      - "22545:6379"
+    container_name: redis
+    volumes:
+      - /var/data/dungeon_wallet/redis/data:/var/lib/redis
+      - ./.docker/redis/redis/conf:/usr/local/etc/redis/redis.conf
+#    environment:
+#      TZ: ${WORKSPACE_TIMEZONE}
+    networks:
+      - backend
+
+  postgres:
+    image: postgres:alpine
+    volumes:
+      - /var/data/dungeon_wallet/database:/var/lib/postgresql/data
+      - /var/data/dungeon_wallet/dump:/dump
+    ports:
+      - "54327:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+#      TZ: ${WORKSPACE_TIMEZONE}
+    networks:
+        - backend
+    container_name: postgres
+
+  php:
     build:
-      context: ./docker/php_fpm
+      context: ./.docker/php
+      dockerfile: .docker/php/Dockerfile
+      args:
+        DOCKER_PHP_VERSION: '8.0'
+#        DOCKER_PHP_ENABLE_XDEBUG: ${DOCKER_PHP_ENABLE_XDEBUG}
+#        TZ: ${WORKSPACE_TIMEZONE}
+    working_dir: /opt/app
     container_name: dungeon_php
     volumes:
-      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
-      - .:/opt/app
+      - ./:/opt/app
+      - ./.docker/php/php.ini:/usr/local/etc/php/php.ini
+    expose:
+      - 9000
     networks:
-      - dungeon_wallet
+      - backend
 
-  database:
-    image: bryceharrington/postgresql-13
-    env_file:
-      - .env
-    environment:
-      - "POSTGRES_DB=${DB_DATABASE}"
-      - "POSTGRES_USER=${DB_USERNAME}"
-      - "POSTGRES_PASSWORD=${DB_PASSWORD}"
-    ports:
-    - 54310:5432
-    volumes:
-      - /var/data/dungeon_wallet/database:/var/lib/postgresql
-    networks:
-      - dungeon_wallet
-
-networks:
-  dungeon_wallet:
