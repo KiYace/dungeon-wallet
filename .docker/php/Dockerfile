@@ -14,7 +14,7 @@ RUN echo "${TZ}" && apk --update add tzdata && \
 RUN apk add --update --no-cache icu-libs \
         libintl \
         build-base \
-        zlib-dev \
+#        zlib-dev \
         cyrus-sasl-dev \
         libgsasl-dev \
         oniguruma-dev \
@@ -50,16 +50,16 @@ RUN apk add --update --no-cache icu-libs \
         ldb-dev \
         make \
         musl-dev \
-        mysql-client \
+#        mysql-client \
         openssh-client \
         pcre-dev \
         ssmtp \
-        sqlite-dev \
+#        sqlite-dev \
         supervisor \
         su-exec \
-        wget \
-        nodejs \
-        npm
+        wget
+#        nodejs \
+#        npm
 
 #  Install php extensions
 RUN php -m && \
@@ -74,7 +74,7 @@ RUN php -m && \
     docker-php-ext-configure soap && \
     docker-php-ext-configure zip && \
     docker-php-ext-install exif \
-        mysqli \
+#        mysqli \
         opcache \
         xsl \
         bcmath \
@@ -85,15 +85,15 @@ RUN php -m && \
         pcntl \
         soap \
         zip \
-        calendar \
-        pdo_mysql && \
+        calendar && \
+#        pdo_mysql && \
     pecl install redis && \
     docker-php-ext-enable redis && \
-    apk add --update --no-cache --virtual .docker-php-mongodb-dependencies \
-    heimdal-dev && \
-    pecl install mongodb && \
-    docker-php-ext-enable mongodb && \
-    apk del .docker-php-mongodb-dependencies && \
+#    apk add --update --no-cache --virtual .docker-php-mongodb-dependencies \
+#    heimdal-dev && \
+#    pecl install mongodb && \
+#    docker-php-ext-enable mongodb && \
+#    apk del .docker-php-mongodb-dependencies && \
     apk add --update --no-cache \
         libpq && \
     # Build dependancies for PostgreSQL \
