@@ -7,6 +7,7 @@ services:
   nginx:
     image: nginx:stable-alpine
     container_name: dungeon_nginx
+    restart: unless-stopped
     ports:
       - "5505:80"
     volumes:
@@ -23,9 +24,10 @@ services:
 
   redis:
     image: redis:latest
+    container_name: dungeon_redis
+    restart: unless-stopped
     ports:
       - "22545:6379"
-    container_name: redis
     volumes:
       - /var/data/dungeon_wallet/redis/data:/var/lib/redis
       - ./.docker/redis/redis/conf:/usr/local/etc/redis/redis.conf
@@ -36,6 +38,8 @@ services:
 
   postgres:
     image: postgres:alpine
+    container_name: dungeon_postgres
+    restart: unless-stopped
     volumes:
       - /var/data/dungeon_wallet/database:/var/lib/postgresql/data
       - /var/data/dungeon_wallet/dump:/dump
@@ -48,7 +52,6 @@ services:
       TZ: ${WORKSPACE_TIMEZONE}
     networks:
         - backend
-    container_name: postgres
 
   php:
     build:
@@ -58,6 +61,9 @@ services:
         DOCKER_PHP_ENABLE_XDEBUG: ${DOCKER_PHP_ENABLE_XDEBUG}
         TZ: ${WORKSPACE_TIMEZONE}
     working_dir: /opt/app
+    restart: unless-stopped
+    command: sh -c "/usr/local/sbin/php-fpm"
+    user: www-data
     container_name: dungeon_php
     volumes:
       - ./:/opt/app
