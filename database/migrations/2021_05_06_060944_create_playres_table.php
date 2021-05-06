@@ -13,7 +13,7 @@ class CreatePlayresTable extends Migration
      */
     public function up()
     {
-        Schema::create('playres', function (Blueprint $table) {
+        Schema::create('players', function (Blueprint $table) {
             $table->id();
             $table->string('nickname', 12);
             $table->string('mail', 45);
