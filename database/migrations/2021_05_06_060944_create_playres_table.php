@@ -13,11 +13,11 @@ class CreatePlayresTable extends Migration
      */
     public function up()
     {
-        Schema::create('playres', function (Blueprint $table) {
+        Schema::create('players', function (Blueprint $table) {
             $table->id();
             $table->string('nickname', 12);
             $table->string('mail', 45);
-            $table->string('password');
+            $table->string('password', 255);
             $table->unsignedBigInteger('skin_id')->index();
             $table->boolean('push_enabled')->default(true);
             $table->string('push_token', 256);

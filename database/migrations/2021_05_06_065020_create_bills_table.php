@@ -18,6 +18,7 @@ class CreateBillsTable extends Migration
             $table->string('name');
             $table->float('sum')->default(0);
             $table->unsignedBigInteger('player_id')->index();
+            $table->boolean('main')->default(false);
             $table->timestamps();
         });
     }

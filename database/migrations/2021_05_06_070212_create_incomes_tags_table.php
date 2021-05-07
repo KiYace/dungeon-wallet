@@ -13,11 +13,10 @@ class CreateIncomesTagsTable extends Migration
      */
     public function up()
     {
-        Schema::create('incomes_tags', function (Blueprint $table) {
+        Schema::create('income_tag', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('income_id')->index();
             $table->unsignedBigInteger('tag_id')->index();
-            $table->timestamps();
         });
     }
 
@@ -28,6 +27,6 @@ class CreateIncomesTagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('incomes_tags');
+        Schema::dropIfExists('income_tag');
     }
 }
