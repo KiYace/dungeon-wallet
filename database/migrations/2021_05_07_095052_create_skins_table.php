@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateExpensesTagsTable extends Migration
+class CreateSkinsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateExpensesTagsTable extends Migration
      */
     public function up()
     {
-        Schema::create('expense_tag', function (Blueprint $table) {
+        Schema::create('skins', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('expense_id')->index();
-            $table->unsignedBigInteger('tag_id')->index();
+            $table->string('name', 6);
+            $table->timestamps();
         });
     }
 
@@ -27,6 +27,6 @@ class CreateExpensesTagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expense_tag');
+        Schema::dropIfExists('skins');
     }
 }

@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\TagsRequest;
+use App\Http\Requests\PlayerRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class TagsCrudController
+ * Class PlayerCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class TagsCrudController extends CrudController
+class PlayerCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -26,9 +26,9 @@ class TagsCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Tags::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/tags');
-        CRUD::setEntityNameStrings('tags', 'tags');
+        CRUD::setModel(\App\Models\Player::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/player');
+        CRUD::setEntityNameStrings('игрок', 'игроки');
     }
 
     /**
@@ -40,26 +40,31 @@ class TagsCrudController extends CrudController
     protected function setupListOperation()
     {
         $this->crud->addColumn([
-            'name' => 'name',
+            'name' => 'nickname',
             'type' => 'text',
-            'label' => 'Название'
+            'label' => 'Ник'
         ]);
         $this->crud->addColumn([
-            'name' => 'color',
+            'name' => 'mail',
             'type' => 'text',
-            'label' => 'Цвет'
+            'label' => 'Почта'
         ]);
         $this->crud->addColumn([
-            'name' => 'player',
+            'name' => 'skin',
             'type' => 'relationship',
-            'entity' => 'player',
-            'attribute' => 'nickname',
-            'label' => 'Игрок'
+            'label' => 'Скин',
+            'entity' => 'skin',
+            'attribute' => 'name'
         ]);
         $this->crud->addColumn([
-            'name' => 'system',
+            'name' => 'push_enabled',
             'type' => 'check',
-            'label' => 'Системный'
+            'label' => 'Пуш уведомления'
+        ]);
+        $this->crud->addColumn([
+            'name' => 'push_token',
+            'type' => 'text',
+            'label' => 'Пуш токен'
         ]);
         $this->crud->addColumn([
             'name' => 'created_at',
@@ -81,29 +86,41 @@ class TagsCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(TagsRequest::class);
+        CRUD::setValidation(PlayerRequest::class);
 
         $this->crud->addField([
-            'name' => 'name',
+            'name' => 'nickname',
             'type' => 'text',
-            'label' => 'Название'
+            'label' => 'Ник'
         ]);
         $this->crud->addField([
-            'name' => 'color',
-            'type' => 'color',
-            'label' => 'Цвет'
+            'name' => 'mail',
+            'type' => 'text',
+            'label' => 'Почта'
+        ]);
+
+        // TODO удалить
+        $this->crud->addField([
+            'name' => 'password',
+            'type' => 'text',
+            'label' => 'Пароль'
         ]);
         $this->crud->addField([
-            'name' => 'players',
+            'name' => 'skin',
             'type' => 'relationship',
-            'entity' => 'player',
-            'attribute' => 'nickname',
-            'label' => 'Игрок'
+            'label' => 'Скин',
+            'entity' => 'skin',
+            'attribute' => 'name'
         ]);
         $this->crud->addField([
-            'name' => 'system',
+            'name' => 'push_enabled',
             'type' => 'checkbox',
-            'label' => 'Системный'
+            'label' => 'Пуш уведомления'
+        ]);
+        $this->crud->addField([
+            'name' => 'push_token',
+            'type' => 'text',
+            'label' => 'Пуш токен'
         ]);
     }
 
@@ -121,26 +138,31 @@ class TagsCrudController extends CrudController
     protected function setupShowOperation()
     {
         $this->crud->addColumn([
-            'name' => 'name',
+            'name' => 'nickname',
             'type' => 'text',
-            'label' => 'Название'
+            'label' => 'Ник'
         ]);
         $this->crud->addColumn([
-            'name' => 'color',
+            'name' => 'mail',
             'type' => 'text',
-            'label' => 'Цвет'
+            'label' => 'Почта'
         ]);
         $this->crud->addColumn([
-            'name' => 'players',
+            'name' => 'skin',
             'type' => 'relationship',
-            'entity' => 'player',
-            'attribute' => 'nickname',
-            'label' => 'Игрок'
+            'label' => 'Скин',
+            'entity' => 'skin',
+            'attribute' => 'name'
         ]);
         $this->crud->addColumn([
-            'name' => 'system',
+            'name' => 'push_enabled',
             'type' => 'check',
-            'label' => 'Системный'
+            'label' => 'Пуш уведомления'
+        ]);
+        $this->crud->addColumn([
+            'name' => 'push_token',
+            'type' => 'text',
+            'label' => 'Пуш токен'
         ]);
         $this->crud->addColumn([
             'name' => 'created_at',
@@ -151,6 +173,11 @@ class TagsCrudController extends CrudController
             'name' => 'updated_at',
             'type' => 'date',
             'label' => 'Дата изменения'
+        ]);
+        $this->crud->addColumn([
+            'name' => 'deleted_at',
+            'type' => 'date',
+            'label' => 'Дата удаления'
         ]);
     }
 }

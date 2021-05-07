@@ -5,7 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Tags extends Model
+class Income extends Model
 {
     use CrudTrait;
 
@@ -15,7 +15,7 @@ class Tags extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'tags';
+    protected $table = 'incomes';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -38,6 +38,16 @@ class Tags extends Model
     public function player()
     {
         return $this->belongsTo(Player::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tags::class, 'expense_tag');
     }
 
     /*

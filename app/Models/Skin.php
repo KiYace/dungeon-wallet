@@ -5,7 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Tags extends Model
+class Skin extends Model
 {
     use CrudTrait;
 
@@ -15,7 +15,7 @@ class Tags extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'tags';
+    protected $table = 'skins';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -34,11 +34,6 @@ class Tags extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
-    public function player()
-    {
-        return $this->belongsTo(Player::class);
-    }
 
     /*
     |--------------------------------------------------------------------------

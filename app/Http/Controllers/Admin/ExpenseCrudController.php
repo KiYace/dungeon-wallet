@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\TagsRequest;
+use App\Http\Requests\ExpenseRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class TagsCrudController
+ * Class ExpenseCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class TagsCrudController extends CrudController
+class ExpenseCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -26,9 +26,9 @@ class TagsCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Tags::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/tags');
-        CRUD::setEntityNameStrings('tags', 'tags');
+        CRUD::setModel(\App\Models\Expense::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/expense');
+        CRUD::setEntityNameStrings('расход', 'расходы');
     }
 
     /**
@@ -45,9 +45,9 @@ class TagsCrudController extends CrudController
             'label' => 'Название'
         ]);
         $this->crud->addColumn([
-            'name' => 'color',
-            'type' => 'text',
-            'label' => 'Цвет'
+            'name' => 'description',
+            'type' => 'textarea',
+            'label' => 'Описание'
         ]);
         $this->crud->addColumn([
             'name' => 'player',
@@ -57,9 +57,23 @@ class TagsCrudController extends CrudController
             'label' => 'Игрок'
         ]);
         $this->crud->addColumn([
-            'name' => 'system',
-            'type' => 'check',
-            'label' => 'Системный'
+            'name' => 'tags',
+            'type' => 'relationship',
+            'entity' => 'tags',
+            'attribute' => 'name',
+            'label' => 'Теги'
+        ]);
+        $this->crud->addColumn([
+            'name' => 'category',
+            'type' => 'relationship',
+            'entity' => 'category',
+            'attribute' => 'nickname',
+            'label' => 'Категория'
+        ]);
+        $this->crud->addColumn([
+            'name' => 'sum',
+            'type' => 'number',
+            'label' => 'Сумма'
         ]);
         $this->crud->addColumn([
             'name' => 'created_at',
@@ -69,7 +83,7 @@ class TagsCrudController extends CrudController
         $this->crud->addColumn([
             'name' => 'updated_at',
             'type' => 'date',
-            'label' => 'Дата изменения'
+            'label' => 'Дата создания'
         ]);
     }
 
@@ -81,7 +95,7 @@ class TagsCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(TagsRequest::class);
+        CRUD::setValidation(ExpenseRequest::class);
 
         $this->crud->addField([
             'name' => 'name',
@@ -89,21 +103,35 @@ class TagsCrudController extends CrudController
             'label' => 'Название'
         ]);
         $this->crud->addField([
-            'name' => 'color',
-            'type' => 'color',
-            'label' => 'Цвет'
+            'name' => 'description',
+            'type' => 'textarea',
+            'label' => 'Описание'
         ]);
         $this->crud->addField([
-            'name' => 'players',
+            'name' => 'player',
             'type' => 'relationship',
             'entity' => 'player',
             'attribute' => 'nickname',
             'label' => 'Игрок'
         ]);
         $this->crud->addField([
-            'name' => 'system',
-            'type' => 'checkbox',
-            'label' => 'Системный'
+            'name' => 'tags',
+            'type' => 'relationship',
+            'entity' => 'tags',
+            'attribute' => 'name',
+            'label' => 'Теги'
+        ]);
+        $this->crud->addField([
+            'name' => 'category',
+            'type' => 'relationship',
+            'entity' => 'category',
+            'attribute' => 'nickname',
+            'label' => 'Категория'
+        ]);
+        $this->crud->addField([
+            'name' => 'sum',
+            'type' => 'number',
+            'label' => 'Сумма'
         ]);
     }
 
@@ -118,7 +146,7 @@ class TagsCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-    protected function setupShowOperation()
+    protected function setupSowOperation()
     {
         $this->crud->addColumn([
             'name' => 'name',
@@ -126,21 +154,35 @@ class TagsCrudController extends CrudController
             'label' => 'Название'
         ]);
         $this->crud->addColumn([
-            'name' => 'color',
-            'type' => 'text',
-            'label' => 'Цвет'
+            'name' => 'description',
+            'type' => 'textarea',
+            'label' => 'Описание'
         ]);
         $this->crud->addColumn([
-            'name' => 'players',
+            'name' => 'player',
             'type' => 'relationship',
             'entity' => 'player',
             'attribute' => 'nickname',
             'label' => 'Игрок'
         ]);
         $this->crud->addColumn([
-            'name' => 'system',
-            'type' => 'check',
-            'label' => 'Системный'
+            'name' => 'tags',
+            'type' => 'relationship',
+            'entity' => 'tags',
+            'attribute' => 'name',
+            'label' => 'Теги'
+        ]);
+        $this->crud->addColumn([
+            'name' => 'category',
+            'type' => 'relationship',
+            'entity' => 'category',
+            'attribute' => 'nickname',
+            'label' => 'Категория'
+        ]);
+        $this->crud->addColumn([
+            'name' => 'sum',
+            'type' => 'number',
+            'label' => 'Сумма'
         ]);
         $this->crud->addColumn([
             'name' => 'created_at',
@@ -150,7 +192,7 @@ class TagsCrudController extends CrudController
         $this->crud->addColumn([
             'name' => 'updated_at',
             'type' => 'date',
-            'label' => 'Дата изменения'
+            'label' => 'Дата создания'
         ]);
     }
 }
