@@ -15,7 +15,9 @@ class CreateSkinsTable extends Migration
     {
         Schema::create('skins', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 6);
+            $table->string('name', 10);
+            $table->integer('rating');
+            $table->string('skin');
             $table->timestamps();
         });
     }

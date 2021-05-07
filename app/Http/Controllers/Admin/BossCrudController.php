@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\SkinRequest;
-use App\Service\Image\ImageUploader;
+use App\Http\Requests\BossRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class SkinCrudController
+ * Class BossCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class SkinCrudController extends CrudController
+class BossCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
@@ -27,15 +26,14 @@ class SkinCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Skin::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/skin');
-        CRUD::setEntityNameStrings('скин', 'скины');
+        CRUD::setModel(\App\Models\Boss::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/boss');
+        CRUD::setEntityNameStrings('босс', 'боссы');
     }
 
     /**
      * Define what happens when the List operation is loaded.
      *
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
     protected function setupListOperation()
@@ -51,6 +49,16 @@ class SkinCrudController extends CrudController
             'label' => 'Название'
         ]);
         $this->crud->addColumn([
+            'name' => 'difficulty',
+            'type' => 'select_from_array',
+            'options' => [
+                'easy' => 'Легкая',
+                'medium' => 'Средняя',
+                'high' => 'Высокая'
+            ],
+            'label' => 'Название'
+        ]);
+        $this->crud->addColumn([
             'name' => 'rating',
             'type' => 'number',
             'label' => 'Рейтинг'
@@ -60,21 +68,40 @@ class SkinCrudController extends CrudController
             'type' => 'image',
             'label' => 'Скин'
         ]);
+        $this->crud->addColumn([
+            'name' => 'created_at',
+            'type' => 'date',
+            'label' => 'Дата создания'
+        ]);
+        $this->crud->addColumn([
+            'name' => 'updated_at',
+            'type' => 'date',
+            'label' => 'Дата изменения'
+        ]);
     }
 
     /**
      * Define what happens when the Create operation is loaded.
      *
-     * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(SkinRequest::class);
+        CRUD::setValidation(BossRequest::class);
 
         $this->crud->addField([
             'name' => 'name',
             'type' => 'text',
+            'label' => 'Название'
+        ]);
+        $this->crud->addField([
+            'name' => 'difficulty',
+            'type' => 'select_from_array',
+            'options' => [
+                'easy' => 'Легкая',
+                'medium' => 'Средняя',
+                'high' => 'Высокая'
+            ],
             'label' => 'Название'
         ]);
         $this->crud->addField([
@@ -92,7 +119,6 @@ class SkinCrudController extends CrudController
     /**
      * Define what happens when the Update operation is loaded.
      *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
     protected function setupUpdateOperation()
@@ -100,7 +126,7 @@ class SkinCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-    protected function setupShowOperation()
+    public function setupShowOperation()
     {
         $this->crud->addColumn([
             'name' => 'id',
@@ -113,6 +139,16 @@ class SkinCrudController extends CrudController
             'label' => 'Название'
         ]);
         $this->crud->addColumn([
+            'name' => 'difficulty',
+            'type' => 'select_from_array',
+            'options' => [
+                'easy' => 'Легкая',
+                'medium' => 'Средняя',
+                'high' => 'Высокая'
+            ],
+            'label' => 'Название'
+        ]);
+        $this->crud->addColumn([
             'name' => 'rating',
             'type' => 'number',
             'label' => 'Рейтинг'
@@ -122,14 +158,15 @@ class SkinCrudController extends CrudController
             'type' => 'image',
             'label' => 'Скин'
         ]);
-    }
-
-    public function store()
-    {
-        /**
-         * @var ImageUploader $ImageUploader
-         */
-        $ImageUploader = app()->make(ImageUploader::class);
-        $fileName = $ImageUploader->storeBase64('dwadaw');
+        $this->crud->addColumn([
+            'name' => 'created_at',
+            'type' => 'date',
+            'label' => 'Дата создания'
+        ]);
+        $this->crud->addColumn([
+            'name' => 'updated_at',
+            'type' => 'date',
+            'label' => 'Дата изменения'
+        ]);
     }
 }

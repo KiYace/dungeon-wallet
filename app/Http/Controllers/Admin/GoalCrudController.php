@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\ExpenseRequest;
+use App\Http\Requests\GoalRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class ExpenseCrudController
+ * Class GoalCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class ExpenseCrudController extends CrudController
+class GoalCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -26,9 +26,9 @@ class ExpenseCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Expense::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/expense');
-        CRUD::setEntityNameStrings('расход', 'расходы');
+        CRUD::setModel(\App\Models\Goal::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/goal');
+        CRUD::setEntityNameStrings('goal', 'goals');
     }
 
     /**
@@ -55,6 +55,16 @@ class ExpenseCrudController extends CrudController
             'label' => 'Описание'
         ]);
         $this->crud->addColumn([
+            'name' => 'important',
+            'type' => 'select_from_array',
+            'options' => [
+                'easy' => 'Маленькая',
+                'medium' => 'Средняя',
+                'high' => 'Высокая'
+            ],
+            'label' => 'Важность'
+        ]);
+        $this->crud->addColumn([
             'name' => 'player',
             'type' => 'relationship',
             'entity' => 'player',
@@ -62,21 +72,17 @@ class ExpenseCrudController extends CrudController
             'label' => 'Игрок'
         ]);
         $this->crud->addColumn([
-            'name' => 'tags',
-            'type' => 'relationship',
-            'entity' => 'tags',
-            'attribute' => 'name',
-            'label' => 'Теги'
+            'name' => 'target',
+            'type' => 'number',
+            'label' => 'Цель'
         ]);
         $this->crud->addColumn([
-            'name' => 'category',
-            'type' => 'relationship',
-            'entity' => 'category',
-            'attribute' => 'name',
-            'label' => 'Категория'
+            'name' => 'current',
+            'type' => 'number',
+            'label' => 'Цель'
         ]);
         $this->crud->addColumn([
-            'name' => 'repeat_at',
+            'name' => 'remind_at',
             'type' => 'select_from_array',
             'options' => [
                 'day' => 'Каждый день',
@@ -87,17 +93,17 @@ class ExpenseCrudController extends CrudController
             'label' => 'Напоминание'
         ]);
         $this->crud->addColumn([
-            'name' => 'sum',
-            'type' => 'number',
-            'label' => 'Сумма'
+            'name' => 'favorite',
+            'type' => 'checkbox',
+            'label' => 'Цель'
+        ]);
+        $this->crud->addColumn([
+            'name' => 'reached',
+            'type' => 'checkbox',
+            'label' => 'Цель'
         ]);
         $this->crud->addColumn([
             'name' => 'created_at',
-            'type' => 'date',
-            'label' => 'Дата создания'
-        ]);
-        $this->crud->addColumn([
-            'name' => 'updated_at',
             'type' => 'date',
             'label' => 'Дата создания'
         ]);
@@ -111,8 +117,7 @@ class ExpenseCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(ExpenseRequest::class);
-
+        CRUD::setValidation(GoalRequest::class);
         $this->crud->addField([
             'name' => 'name',
             'type' => 'text',
@@ -124,6 +129,16 @@ class ExpenseCrudController extends CrudController
             'label' => 'Описание'
         ]);
         $this->crud->addField([
+            'name' => 'important',
+            'type' => 'select_from_array',
+            'options' => [
+                'easy' => 'Маленькая',
+                'medium' => 'Средняя',
+                'high' => 'Высокая'
+            ],
+            'label' => 'Важность'
+        ]);
+        $this->crud->addField([
             'name' => 'player',
             'type' => 'relationship',
             'entity' => 'player',
@@ -131,21 +146,17 @@ class ExpenseCrudController extends CrudController
             'label' => 'Игрок'
         ]);
         $this->crud->addField([
-            'name' => 'tags',
-            'type' => 'relationship',
-            'entity' => 'tags',
-            'attribute' => 'name',
-            'label' => 'Теги'
+            'name' => 'target',
+            'type' => 'number',
+            'label' => 'Цель'
         ]);
         $this->crud->addField([
-            'name' => 'category',
-            'type' => 'relationship',
-            'entity' => 'category',
-            'attribute' => 'name',
-            'label' => 'Категория'
+            'name' => 'current',
+            'type' => 'number',
+            'label' => 'Цель'
         ]);
         $this->crud->addField([
-            'name' => 'repeat_at',
+            'name' => 'remind_at',
             'type' => 'select_from_array',
             'options' => [
                 'day' => 'Каждый день',
@@ -156,10 +167,22 @@ class ExpenseCrudController extends CrudController
             'label' => 'Напоминание'
         ]);
         $this->crud->addField([
-            'name' => 'sum',
-            'type' => 'number',
-            'label' => 'Сумма'
+            'name' => 'favorite',
+            'type' => 'checkbox',
+            'label' => 'Цель'
         ]);
+        $this->crud->addField([
+            'name' => 'reached',
+            'type' => 'checkbox',
+            'label' => 'Цель'
+        ]);
+
+
+        /**
+         * Fields can be defined using the fluent syntax or array syntax:
+         * - CRUD::field('price')->type('number');
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
+         */
     }
 
     /**
@@ -173,7 +196,7 @@ class ExpenseCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-    protected function setupSowOperation()
+    public function setupShowOperation()
     {
         $this->crud->addColumn([
             'name' => 'id',
@@ -191,6 +214,16 @@ class ExpenseCrudController extends CrudController
             'label' => 'Описание'
         ]);
         $this->crud->addColumn([
+            'name' => 'important',
+            'type' => 'select_from_array',
+            'options' => [
+                'easy' => 'Маленькая',
+                'medium' => 'Средняя',
+                'high' => 'Высокая'
+            ],
+            'label' => 'Важность'
+        ]);
+        $this->crud->addColumn([
             'name' => 'player',
             'type' => 'relationship',
             'entity' => 'player',
@@ -198,21 +231,17 @@ class ExpenseCrudController extends CrudController
             'label' => 'Игрок'
         ]);
         $this->crud->addColumn([
-            'name' => 'tags',
-            'type' => 'relationship',
-            'entity' => 'tags',
-            'attribute' => 'name',
-            'label' => 'Теги'
+            'name' => 'target',
+            'type' => 'number',
+            'label' => 'Цель'
         ]);
         $this->crud->addColumn([
-            'name' => 'category',
-            'type' => 'relationship',
-            'entity' => 'category',
-            'attribute' => 'name',
-            'label' => 'Категория'
+            'name' => 'current',
+            'type' => 'number',
+            'label' => 'Цель'
         ]);
         $this->crud->addColumn([
-            'name' => 'repeat_at',
+            'name' => 'remind_at',
             'type' => 'select_from_array',
             'options' => [
                 'day' => 'Каждый день',
@@ -223,17 +252,17 @@ class ExpenseCrudController extends CrudController
             'label' => 'Напоминание'
         ]);
         $this->crud->addColumn([
-            'name' => 'sum',
-            'type' => 'number',
-            'label' => 'Сумма'
+            'name' => 'favorite',
+            'type' => 'checkbox',
+            'label' => 'Цель'
+        ]);
+        $this->crud->addColumn([
+            'name' => 'reached',
+            'type' => 'checkbox',
+            'label' => 'Цель'
         ]);
         $this->crud->addColumn([
             'name' => 'created_at',
-            'type' => 'date',
-            'label' => 'Дата создания'
-        ]);
-        $this->crud->addColumn([
-            'name' => 'updated_at',
             'type' => 'date',
             'label' => 'Дата создания'
         ]);

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBillsTable extends Migration
+class CreateBossesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateBillsTable extends Migration
      */
     public function up()
     {
-        Schema::create('bills', function (Blueprint $table) {
+        Schema::create('bosses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->float('sum')->default(0);
-            $table->unsignedBigInteger('player_id')->index();
-            $table->boolean('main')->default(false);
+            $table->enum('difficulty', ['easy', 'medium', 'high']);
+            $table->integer('rating')->default(10);
+            $table->string('skin');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateBillsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bills');
+        Schema::dropIfExists('bosses');
     }
 }

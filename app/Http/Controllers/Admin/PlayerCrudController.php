@@ -40,6 +40,11 @@ class PlayerCrudController extends CrudController
     protected function setupListOperation()
     {
         $this->crud->addColumn([
+            'name' => 'id',
+            'type' => 'number',
+            'label' => 'ID'
+        ]);
+        $this->crud->addColumn([
             'name' => 'nickname',
             'type' => 'text',
             'label' => 'Ник'
@@ -137,6 +142,11 @@ class PlayerCrudController extends CrudController
 
     protected function setupShowOperation()
     {
+        $this->crud->addColumn([
+            'name' => 'id',
+            'type' => 'number',
+            'label' => 'ID'
+        ]);
         $this->crud->addColumn([
             'name' => 'nickname',
             'type' => 'text',
