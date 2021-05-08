@@ -15,7 +15,7 @@ class CreateBossesTable extends Migration
     {
         Schema::create('bosses', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->enum('difficulty', ['easy', 'medium', 'high']);
             $table->integer('rating')->default(10);
             $table->string('skin');

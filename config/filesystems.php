@@ -42,6 +42,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'skins' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/skins'),
+            'url' => env('APP_URL').'/storage/skins',
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

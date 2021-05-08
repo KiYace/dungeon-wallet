@@ -11,4 +11,10 @@ interface ImageUploader
     public function storeBase64(string $base64): string;
 
     public function storeBlob(string $blob): string;
+
+    public function setDisk(string $disk): void;
+
+    public function getDisk(): string;
+
+    public function setPath(string $path): void;
 }

@@ -126,10 +126,20 @@ class SkinCrudController extends CrudController
 
     public function store()
     {
+        $request = $this->crud->getRequest()->request;
+        $image = $request->get('skin');
+        $request->remove('skin');
+
         /**
          * @var ImageUploader $ImageUploader
          */
         $ImageUploader = app()->make(ImageUploader::class);
-        $fileName = $ImageUploader->storeBase64('dwadaw');
+        $ImageUploader->setDisk('skins');
+        $ImageUploader->setPath($request->get('name'));
+        $filePath = $ImageUploader->storeBase64($image);
+        $request->add(['skin' => $filePath]);
+
+        $response = $this->traitStore();
+        return $response;
     }
 }
