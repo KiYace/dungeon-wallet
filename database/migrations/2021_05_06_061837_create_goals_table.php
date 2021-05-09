@@ -21,6 +21,7 @@ class CreateGoalsTable extends Migration
             $table->unsignedBigInteger('player_id')->index();
             $table->integer('target');
             $table->float('current')->default(0)->nullable();
+            $table->enum('remind_at', ['day', 'week', 'month', 'not']);
             $table->integer('sort')->default(10);
             $table->boolean('favorite')->default(false);
             $table->boolean('reached')->default(false);

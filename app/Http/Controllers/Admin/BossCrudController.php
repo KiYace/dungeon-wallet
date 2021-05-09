@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\TagsRequest;
+use App\Http\Requests\BossRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class TagsCrudController
+ * Class BossCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class TagsCrudController extends CrudController
+class BossCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -26,15 +26,14 @@ class TagsCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Tags::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/tags');
-        CRUD::setEntityNameStrings('tags', 'tags');
+        CRUD::setModel(\App\Models\Boss::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/boss');
+        CRUD::setEntityNameStrings('босс', 'боссы');
     }
 
     /**
      * Define what happens when the List operation is loaded.
      *
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
     protected function setupListOperation()
@@ -50,21 +49,24 @@ class TagsCrudController extends CrudController
             'label' => 'Название'
         ]);
         $this->crud->addColumn([
-            'name' => 'color',
-            'type' => 'text',
-            'label' => 'Цвет'
+            'name' => 'difficulty',
+            'type' => 'select_from_array',
+            'options' => [
+                'easy' => 'Легкая',
+                'medium' => 'Средняя',
+                'high' => 'Высокая'
+            ],
+            'label' => 'Название'
         ]);
         $this->crud->addColumn([
-            'name' => 'player',
-            'type' => 'relationship',
-            'entity' => 'player',
-            'attribute' => 'nickname',
-            'label' => 'Игрок'
+            'name' => 'rating',
+            'type' => 'number',
+            'label' => 'Рейтинг'
         ]);
         $this->crud->addColumn([
-            'name' => 'system',
-            'type' => 'check',
-            'label' => 'Системный'
+            'name' => 'skin',
+            'type' => 'image',
+            'label' => 'Скин'
         ]);
         $this->crud->addColumn([
             'name' => 'created_at',
@@ -81,12 +83,11 @@ class TagsCrudController extends CrudController
     /**
      * Define what happens when the Create operation is loaded.
      *
-     * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(TagsRequest::class);
+        CRUD::setValidation(BossRequest::class);
 
         $this->crud->addField([
             'name' => 'name',
@@ -94,28 +95,30 @@ class TagsCrudController extends CrudController
             'label' => 'Название'
         ]);
         $this->crud->addField([
-            'name' => 'color',
-            'type' => 'color',
-            'label' => 'Цвет'
+            'name' => 'difficulty',
+            'type' => 'select_from_array',
+            'options' => [
+                'easy' => 'Легкая',
+                'medium' => 'Средняя',
+                'high' => 'Высокая'
+            ],
+            'label' => 'Название'
         ]);
         $this->crud->addField([
-            'name' => 'players',
-            'type' => 'relationship',
-            'entity' => 'player',
-            'attribute' => 'nickname',
-            'label' => 'Игрок'
+            'name' => 'rating',
+            'type' => 'number',
+            'label' => 'Рейтинг'
         ]);
         $this->crud->addField([
-            'name' => 'system',
-            'type' => 'checkbox',
-            'label' => 'Системный'
+            'name' => 'skin',
+            'type' => 'image',
+            'label' => 'Скин'
         ]);
     }
 
     /**
      * Define what happens when the Update operation is loaded.
      *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
     protected function setupUpdateOperation()
@@ -123,7 +126,7 @@ class TagsCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-    protected function setupShowOperation()
+    public function setupShowOperation()
     {
         $this->crud->addColumn([
             'name' => 'id',
@@ -136,21 +139,24 @@ class TagsCrudController extends CrudController
             'label' => 'Название'
         ]);
         $this->crud->addColumn([
-            'name' => 'color',
-            'type' => 'text',
-            'label' => 'Цвет'
+            'name' => 'difficulty',
+            'type' => 'select_from_array',
+            'options' => [
+                'easy' => 'Легкая',
+                'medium' => 'Средняя',
+                'high' => 'Высокая'
+            ],
+            'label' => 'Название'
         ]);
         $this->crud->addColumn([
-            'name' => 'players',
-            'type' => 'relationship',
-            'entity' => 'player',
-            'attribute' => 'nickname',
-            'label' => 'Игрок'
+            'name' => 'rating',
+            'type' => 'number',
+            'label' => 'Рейтинг'
         ]);
         $this->crud->addColumn([
-            'name' => 'system',
-            'type' => 'check',
-            'label' => 'Системный'
+            'name' => 'skin',
+            'type' => 'image',
+            'label' => 'Скин'
         ]);
         $this->crud->addColumn([
             'name' => 'created_at',
