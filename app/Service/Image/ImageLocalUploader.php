@@ -91,7 +91,9 @@ final class ImageLocalUploader implements ImageUploader
      */
     public function storeBlob(string $blob): string
     {
-        // TODO: Implement storeBlob() method.
+        $base64 = file_get_contents($blob);
+        $filename = $this->storeBase64($base64);
+        return $filename;
     }
 
     /**
