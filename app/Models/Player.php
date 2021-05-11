@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
 
 class Player extends Model
 {
-    use CrudTrait;
+    use CrudTrait, HasApiTokens;
 
     /*
     |--------------------------------------------------------------------------
