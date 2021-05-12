@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\DTO\AuthDTO;
 use App\Exceptions\Auth\WrongPasswordException;
 use App\Exceptions\Player\PlayerNotFoundException;
 use App\Models\Player;
@@ -41,33 +42,32 @@ class AuthService
     }
 
     /**
-     * @param string $email
-     * @param string $password
+     * @param AuthDTO $authDTO
      * @return JsonResponse
      * @throws PlayerNotFoundException
      * @throws WrongPasswordException
      */
-    public function authorize(string $email, string $password): JsonResponse
+    public function authorize(AuthDTO $authDTO): JsonResponse
     {
         $this->logger->notice('find player for logging', [
-            'email' => $email,
+            'email' => $authDTO->getEmail(),
         ]);
 
-        $this->player = Player::firstWhere('mail', $email);
+        $this->player = Player::firstWhere('mail', $authDTO->getEmail());
 
         if (empty($this->player)) {
             $this->logger->alert('player not found', [
-                'email' => $email,
+                'email' => $authDTO->getEmail(),
             ]);
 
             throw new PlayerNotFoundException();
         }
 
-        if(Hash::check($password, $this->player->password)) {
+        if(Hash::check($authDTO->getPassword(), $this->player->password)) {
             $token = $this->generateToken('aboba');
         } else {
             $this->logger->alert('player enter wrong password', [
-                'email' => $email,
+                'email' => $authDTO->getEmail(),
                 'player' => $this->player->id,
             ]);
 
