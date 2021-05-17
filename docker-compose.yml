@@ -57,7 +57,7 @@ services:
     build:
       context: ./.docker/php
       args:
-        DOCKER_PHP_VERSION: '8.0'
+        DOCKER_PHP_VERSION: '8.0.1'
         DOCKER_PHP_ENABLE_XDEBUG: ${DOCKER_PHP_ENABLE_XDEBUG}
         TZ: ${WORKSPACE_TIMEZONE}
     working_dir: /opt/app
