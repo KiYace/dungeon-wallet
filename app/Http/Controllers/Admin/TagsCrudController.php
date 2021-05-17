@@ -40,6 +40,11 @@ class TagsCrudController extends CrudController
     protected function setupListOperation()
     {
         $this->crud->addColumn([
+            'name' => 'id',
+            'type' => 'number',
+            'label' => 'ID'
+        ]);
+        $this->crud->addColumn([
             'name' => 'name',
             'type' => 'text',
             'label' => 'Название'
@@ -120,6 +125,11 @@ class TagsCrudController extends CrudController
 
     protected function setupShowOperation()
     {
+        $this->crud->addColumn([
+            'name' => 'id',
+            'type' => 'number',
+            'label' => 'ID'
+        ]);
         $this->crud->addColumn([
             'name' => 'name',
             'type' => 'text',

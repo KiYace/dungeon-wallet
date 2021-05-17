@@ -19,7 +19,7 @@ class CreateIncomesTable extends Migration
             $table->string('description');
             $table->unsignedBigInteger('player_id')->index();
             $table->unsignedBigInteger('category_id')->index();
-            $table->unsignedBigInteger('bill_id')->index();
+            $table->enum('repeat_at', ['day', 'week', 'month', 'not']);
             $table->float('sum');
             $table->timestamps();
         });

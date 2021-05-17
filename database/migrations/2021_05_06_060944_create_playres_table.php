@@ -15,7 +15,7 @@ class CreatePlayresTable extends Migration
     {
         Schema::create('players', function (Blueprint $table) {
             $table->id();
-            $table->string('nickname', 12);
+            $table->string('nickname', 12)->unique();
             $table->string('mail', 45);
             $table->string('password', 255);
             $table->unsignedBigInteger('skin_id')->index();

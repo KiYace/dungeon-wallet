@@ -1,0 +1,278 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Dungeon Wallet",
+        "description": "",
+        "contact": {
+            "email": "kiyacelerroy@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Авторизация пользователя",
+                "description": "Авторизация пользователя",
+                "operationId": "App\\Http\\Controllers\\API\\AuthController::login",
+                "requestBody": {
+                    "description": "Pass user credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "description": "Email",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Пароль",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "Токен доступа",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Логаут",
+                "description": "Логаут",
+                "operationId": "App\\Http\\Controllers\\API\\AuthController::logout",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "Токен доступа",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/player/": {
+            "post": {
+                "tags": [
+                    "Player"
+                ],
+                "summary": "Регистрация игрока",
+                "description": "Регистрация игрока",
+                "operationId": "App\\Http\\Controllers\\API\\PlayerController::store",
+                "requestBody": {
+                    "description": "Pass user credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nickname": {
+                                        "description": "nickname",
+                                        "type": "string"
+                                    },
+                                    "mail": {
+                                        "description": "Email",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Пароль",
+                                        "type": "string"
+                                    },
+                                    "password_confirm": {
+                                        "description": "Подтверждение пароля",
+                                        "type": "string"
+                                    },
+                                    "skin": {
+                                        "description": "ID скина",
+                                        "type": "integer"
+                                    },
+                                    "push_enabled": {
+                                        "description": "PUSH enabled",
+                                        "type": "boolean"
+                                    },
+                                    "push_token": {
+                                        "description": "PUSH token",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Player"
+                                        },
+                                        "token": {
+                                            "description": "Токен доступа",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/skins": {
+            "get": {
+                "tags": [
+                    "Skins"
+                ],
+                "summary": "Скины",
+                "description": "Скины",
+                "operationId": "App\\Http\\Controllers\\API\\SkinsController::index",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Skin"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Player": {
+                "properties": {
+                    "id": {
+                        "description": "ID",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "nickname": {
+                        "description": "Ник",
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "mail": {
+                        "description": "Email",
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "skin_id": {
+                        "description": "ID скина",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "push_enabled": {
+                        "description": "PUSH enabled",
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "push_token": {
+                        "description": "PUSH token",
+                        "type": "string",
+                        "readOnly": true
+                    }
+                },
+                "type": "object"
+            },
+            "Skin": {
+                "properties": {
+                    "id": {
+                        "description": "ID",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "description": "Назавние",
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "rating": {
+                        "description": "Рейтинг",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "skin": {
+                        "description": "Скин",
+                        "type": "string",
+                        "readOnly": true
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearer": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "Find out more about Swagger",
+        "url": "http://swagger.io"
+    },
+    "security": [
+        []
+    ]
+}

@@ -40,6 +40,11 @@ class IncomeCrudController extends CrudController
     protected function setupListOperation()
     {
         $this->crud->addColumn([
+            'name' => 'id',
+            'type' => 'number',
+            'label' => 'ID'
+        ]);
+        $this->crud->addColumn([
             'name' => 'name',
             'type' => 'text',
             'label' => 'Название'
@@ -67,8 +72,19 @@ class IncomeCrudController extends CrudController
             'name' => 'category',
             'type' => 'relationship',
             'entity' => 'category',
-            'attribute' => 'nickname',
+            'attribute' => 'name',
             'label' => 'Категория'
+        ]);
+        $this->crud->addColumn([
+            'name' => 'repeat_at',
+            'type' => 'select_from_array',
+            'options' => [
+                'day' => 'Каждый день',
+                'week' => 'Каждую неделю',
+                'month' => 'Каждый месяц',
+                'not' => 'Не напоминать',
+            ],
+            'label' => 'Напоминание'
         ]);
         $this->crud->addColumn([
             'name' => 'sum',
@@ -131,8 +147,19 @@ class IncomeCrudController extends CrudController
             'name' => 'category',
             'type' => 'relationship',
             'entity' => 'category',
-            'attribute' => 'nickname',
+            'attribute' => 'name',
             'label' => 'Категория'
+        ]);
+        $this->crud->addField([
+            'name' => 'repeat_at',
+            'type' => 'select_from_array',
+            'options' => [
+                'day' => 'Каждый день',
+                'week' => 'Каждую неделю',
+                'month' => 'Каждый месяц',
+                'not' => 'Не напоминать',
+            ],
+            'label' => 'Напоминание'
         ]);
         $this->crud->addField([
             'name' => 'sum',
@@ -154,6 +181,11 @@ class IncomeCrudController extends CrudController
 
     protected function setupSowOperation()
     {
+        $this->crud->addColumn([
+            'name' => 'id',
+            'type' => 'number',
+            'label' => 'ID'
+        ]);
         $this->crud->addColumn([
             'name' => 'name',
             'type' => 'text',
@@ -182,8 +214,19 @@ class IncomeCrudController extends CrudController
             'name' => 'category',
             'type' => 'relationship',
             'entity' => 'category',
-            'attribute' => 'nickname',
+            'attribute' => 'name',
             'label' => 'Категория'
+        ]);
+        $this->crud->addColumn([
+            'name' => 'repeat_at',
+            'type' => 'select_from_array',
+            'options' => [
+                'day' => 'Каждый день',
+                'week' => 'Каждую неделю',
+                'month' => 'Каждый месяц',
+                'not' => 'Не напоминать',
+            ],
+            'label' => 'Напоминание'
         ]);
         $this->crud->addColumn([
             'name' => 'sum',
