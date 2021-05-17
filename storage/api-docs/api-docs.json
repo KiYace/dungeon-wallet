@@ -95,6 +95,78 @@
                 ]
             }
         },
+        "/api/player/": {
+            "post": {
+                "tags": [
+                    "Player"
+                ],
+                "summary": "Регистрация игрока",
+                "description": "Регистрация игрока",
+                "operationId": "App\\Http\\Controllers\\API\\PlayerController::store",
+                "requestBody": {
+                    "description": "Pass user credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nickname": {
+                                        "description": "nickname",
+                                        "type": "string"
+                                    },
+                                    "mail": {
+                                        "description": "Email",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Пароль",
+                                        "type": "string"
+                                    },
+                                    "password_confirm": {
+                                        "description": "Подтверждение пароля",
+                                        "type": "string"
+                                    },
+                                    "skin": {
+                                        "description": "ID скина",
+                                        "type": "integer"
+                                    },
+                                    "push_enabled": {
+                                        "description": "PUSH enabled",
+                                        "type": "boolean"
+                                    },
+                                    "push_token": {
+                                        "description": "PUSH token",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Player"
+                                        },
+                                        "token": {
+                                            "description": "Токен доступа",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/skins": {
             "get": {
                 "tags": [
@@ -128,6 +200,41 @@
     },
     "components": {
         "schemas": {
+            "Player": {
+                "properties": {
+                    "id": {
+                        "description": "ID",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "nickname": {
+                        "description": "Ник",
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "mail": {
+                        "description": "Email",
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "skin_id": {
+                        "description": "ID скина",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "push_enabled": {
+                        "description": "PUSH enabled",
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "push_token": {
+                        "description": "PUSH token",
+                        "type": "string",
+                        "readOnly": true
+                    }
+                },
+                "type": "object"
+            },
             "Skin": {
                 "properties": {
                     "id": {

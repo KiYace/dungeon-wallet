@@ -15,7 +15,7 @@ use Psr\Log\NullLogger;
 
 class AuthService
 {
-    public Player|Authenticatable $player;
+    public Player|Authenticatable|null $player;
 
     private LoggerInterface $logger;
 
@@ -60,11 +60,11 @@ class AuthService
                 'email' => $authDTO->getEmail(),
             ]);
 
-            throw new PlayerNotFoundException();
+            throw new PlayerNotFoundException('player not found');
         }
 
         if(Hash::check($authDTO->getPassword(), $this->player->password)) {
-            $token = $this->generateToken('aboba');
+            $token = $this->generateToken('');
         } else {
             $this->logger->alert('player enter wrong password', [
                 'email' => $authDTO->getEmail(),
@@ -79,12 +79,11 @@ class AuthService
         ]);
     }
 
-
     /**
      * @param string $device
      * @return string
      */
-    private function generateToken(string $device): string
+    public function generateToken(string $device): string
     {
         return $this->player->createToken($device)->plainTextToken;
     }

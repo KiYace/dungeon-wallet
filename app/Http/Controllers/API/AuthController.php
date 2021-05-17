@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use App\DTO\AuthDTO;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RequestsDTO\AuthRequest;
 use App\Service\AuthService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -45,20 +44,14 @@ class AuthController extends Controller
      *         )
      *     )
      * )
-     * @param Request $request
+     * @param AuthRequest $request
      * @throws \Exception
      * @return JsonResponse
      */
-    public function login(Request $request): JsonResponse
+    public function login(AuthRequest $request): JsonResponse
     {
-        $this->validate($request, [
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-
-        $AuthDTO = new AuthDTO($request->get('email'), $request->get('password'));
         $AuthService = new AuthService();
-        return $AuthService->authorize($AuthDTO);
+        return $AuthService->authorize($request->getDto());
     }
 
     /**
