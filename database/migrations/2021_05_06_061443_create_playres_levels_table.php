@@ -13,7 +13,7 @@ class CreatePlayresLevelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('playres_levels', function (Blueprint $table) {
+        Schema::create('player_levels', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('player_id')->index();
             $table->integer('level')->default(1);

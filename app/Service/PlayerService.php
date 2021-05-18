@@ -3,8 +3,10 @@
 namespace App\Service;
 
 use App\DTO\Player\RegisterDTO;
+use App\Http\Resources\Player\LevelResource;
 use App\Http\Resources\PlayerResource;
 use App\Models\Player;
+use App\Service\Player\LevelService;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use JetBrains\PhpStorm\Pure;
@@ -66,9 +68,15 @@ class PlayerService
         $AuthService->setPlayer($player);
         $token = $AuthService->generateToken('');
 
+        $LevelService = new LevelService();
+        $LevelService->setLogger($this->logger);
+        $LevelService->setPlayer($player);
+        $level = $LevelService->createFirstLevel();
+
         return (new PlayerResource($player))
             ->additional([
-                'token' => $token
+                'token' => $token,
+                'level' => new LevelResource($level),
             ]);
     }
 }
