@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RequestsDTO\Player\ChangePasswordRequest;
 use App\Http\Requests\RequestsDTO\Player\ChangeRequest;
 use App\Http\Requests\RequestsDTO\Player\RegisterRequest;
 use App\Http\Resources\PlayerResource;
 use App\Service\PlayerService;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class PlayerController extends Controller
@@ -132,5 +134,59 @@ class PlayerController extends Controller
         $PlayerService = new PlayerService();
         $PlayerService->setPlayer($Player);
         return $PlayerService->change($request->getDto());
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/api/player/change_password",
+     *     summary="Изменение пароля",
+     *     tags={"Player"},
+     *     description="Изменение пароля",
+     *     security={
+     *         {"bearer": {}},
+     *     },
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Pass user credentials",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="password_old",
+     *                 type="string",
+     *                 description="Пароль"
+     *             ),
+     *             @OA\Property(
+     *                 property="password",
+     *                 type="string",
+     *                 description="Пароль"
+     *             ),
+     *             @OA\Property(
+     *                 property="password_confirm",
+     *                 type="string",
+     *                 description="Подтверждение пароля"
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Ok",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 ref="#/components/schemas/Player"
+     *             ),
+     *         )
+     *     )
+     * )
+     * @param ChangePasswordRequest $request
+     * @throws \Exception
+     * @return Response
+     */
+    public function changePassword(ChangePasswordRequest $request): Response
+    {
+        $Player = Auth::user();
+        $PlayerService = new PlayerService();
+        $PlayerService->setPlayer($Player);
+        return $PlayerService->changePassword($request->getDto());
     }
 }
