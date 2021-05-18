@@ -218,6 +218,63 @@
                 }
             }
         },
+        "/api/player/change_password": {
+            "put": {
+                "tags": [
+                    "Player"
+                ],
+                "summary": "Изменение пароля",
+                "description": "Изменение пароля",
+                "operationId": "App\\Http\\Controllers\\API\\PlayerController::changePassword",
+                "requestBody": {
+                    "description": "Pass user credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "password_old": {
+                                        "description": "Пароль",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Пароль",
+                                        "type": "string"
+                                    },
+                                    "password_confirm": {
+                                        "description": "Подтверждение пароля",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Player"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/api/skins": {
             "get": {
                 "tags": [
