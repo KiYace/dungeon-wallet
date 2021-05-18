@@ -5,19 +5,21 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Traits\PlayerTrait;
+use Tests\Traits\SkinTrait;
 
 class PlayerTest extends TestCase
 {
-    use DatabaseTransactions, PlayerTrait;
+    use DatabaseTransactions, PlayerTrait, SkinTrait;
 
     public function testPlayerRegister()
     {
+        $skin = $this->createSkin();
         $response = $this->postJson('api/player/', [
             'nickname' => 'Lerroyy',
             'mail' => 'kiyacelerroy@gmail.com',
             'password' => '123123',
             'password_confirm' => '123123',
-            'skin' => 1,
+            'skin' => $skin->id,
             'push_enabled' => true,
             'push_token' => '123123',
         ]);
@@ -33,12 +35,13 @@ class PlayerTest extends TestCase
 
     public function testPlayerRegisterValidation()
     {
+        $skin = $this->createSkin();
         $response = $this->postJson('api/player/', [
             'nickname' => 'Lerroyy',
             'mail' => 'kiyacelerroy@gmail.com',
             'password' => '123123',
             'password_confirm' => '121233123',
-            'skin' => 1,
+            'skin' => $skin->id,
             'push_enabled' => true,
             'push_token' => '123123',
         ]);
@@ -52,7 +55,7 @@ class PlayerTest extends TestCase
             'mail' => 'kiyacelerroy',
             'password' => '123123',
             'password_confirm' => '123123',
-            'skin' => 1,
+            'skin' => $skin->id,
             'push_enabled' => true,
             'push_token' => '123123',
         ]);

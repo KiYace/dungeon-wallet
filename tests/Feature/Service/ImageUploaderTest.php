@@ -16,6 +16,7 @@ class ImageUploaderTest extends TestCase
          * @var ImageUploader $ImageUploader
          */
         $ImageUploader = app()->make(ImageUploader::class);
+        $ImageUploader->setDisk('public');
         Storage::fake($ImageUploader->getDisk());
 
         $filePath = $ImageUploader->storeBase64(self::BASE64);

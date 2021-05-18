@@ -64,11 +64,9 @@ final class ImageLocalUploader implements ImageUploader
         try {
             $extension = $this->getImageExtension($base64);
             $filename = Str::uuid() . '.' . $extension;
-            $filepath = $this->path . '/' . $filename;
+            $filepath = $this->path ? $this->path . '/' . $filename : $filename;
             $base64 = explode('base64,', $base64);
             Storage::disk($this->disk)->put($filepath, base64_decode($base64[1]));
-
-            $filepath = Storage::disk($this->disk)->url($filepath);
         } catch (\Exception $e) {
             $this->logger->alert('cant parse image', [
                 'message' => $e->getMessage(),

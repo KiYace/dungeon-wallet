@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\DTO\Player\ChangeDTO;
 use App\DTO\Player\RegisterDTO;
 use App\Http\Resources\Player\LevelResource;
 use App\Http\Resources\PlayerResource;
@@ -78,5 +79,15 @@ class PlayerService
                 'token' => $token,
                 'level' => new LevelResource($level),
             ]);
+    }
+
+    public function change(ChangeDTO $changeDTO): PlayerResource
+    {
+        $this->player->update([
+            'nickname' => $changeDTO->getNickname(),
+            'skin_id' => $changeDTO->getSkin(),
+        ]);
+
+        return new PlayerResource($this->player);
     }
 }
