@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RequestsDTO\Player\ChangeRequest;
 use App\Http\Requests\RequestsDTO\Player\RegisterRequest;
 use App\Http\Resources\PlayerResource;
 use App\Service\PlayerService;
+use Illuminate\Support\Facades\Auth;
 
 class PlayerController extends Controller
 {
@@ -81,5 +83,54 @@ class PlayerController extends Controller
     {
         $PlayerService = new PlayerService();
         return $PlayerService->register($request->getDto());
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/api/player/",
+     *     summary="Изменение данных игрока",
+     *     tags={"Player"},
+     *     description="Изменение данных игрока",
+     *     security={
+     *         {"bearer": {}},
+     *     },
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Pass user credentials",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="nickname",
+     *                 type="string",
+     *                 description="nickname"
+     *             ),
+     *             @OA\Property(
+     *                 property="skin",
+     *                 type="integer",
+     *                 description="ID скина"
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Ok",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 ref="#/components/schemas/Player"
+     *             ),
+     *         )
+     *     )
+     * )
+     * @param ChangeRequest $request
+     * @throws \Exception
+     * @return PlayerResource
+     */
+    public function update(ChangeRequest $request): PlayerResource
+    {
+        $Player = Auth::user();
+        $PlayerService = new PlayerService();
+        $PlayerService->setPlayer($Player);
+        return $PlayerService->change($request->getDto());
     }
 }

@@ -1,35 +1,40 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Player;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Skin
+ * Class Player
  * @package App\Models
  * @property int $id
- * @property string $name
- * @property int $rating
- * @property string $skin
+ * @property int $player_id
+ * @property int $level
+ * @property int $exp
+ * @property int $points
+ * @property \DateTime $created_at
+ * @property \DateTime $updated_at
  */
-class Skin extends Model
+class Level extends Model
 {
-    use CrudTrait, HasFactory;
-
+    const START_LEVEL = 1;
+    const START_EXP = 100;
+    const START_POINTS = 100;
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'skins';
+    protected $table = 'player_levels';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
     // protected $fillable = [];
-    // protected $hidden = [];
+      protected $hidden = [
+          'created_at',
+          'updated_at'
+      ];
     // protected $dates = [];
 
     /*

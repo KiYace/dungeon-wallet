@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-Route::resource('player', 'App\Http\Controllers\API\PlayerController', [
-    'only' => ['index', 'store'],
-]);
+Route::post('player', 'App\Http\Controllers\API\PlayerController@store');
+Route::middleware('auth:sanctum')
+    ->put('player', 'App\Http\Controllers\API\PlayerController@update');

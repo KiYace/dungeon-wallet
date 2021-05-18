@@ -103,13 +103,6 @@ class PlayerCrudController extends CrudController
             'type' => 'text',
             'label' => 'Почта'
         ]);
-
-        // TODO удалить
-        $this->crud->addField([
-            'name' => 'password',
-            'type' => 'text',
-            'label' => 'Пароль'
-        ]);
         $this->crud->addField([
             'name' => 'skin',
             'type' => 'relationship',
