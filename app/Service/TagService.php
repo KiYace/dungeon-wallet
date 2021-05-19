@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\DTO\Tag\CreateDTO;
+use App\Http\Requests\RequestsDTO\Tag\CreateRequest;
 use App\Http\Resources\TagResource;
 use App\Models\Player;
 use App\Models\Tags;
@@ -33,5 +35,20 @@ class TagService
             ->get();
 
         return TagResource::collection($tags);
+    }
+
+    /**
+     * @param CreateDTO $createDTO
+     * @return TagResource
+     */
+    public function createTag(CreateDTO $createDTO): TagResource
+    {
+        $tag = Tags::create([
+            'name' => $createDTO->getName(),
+            'color' => $createDTO->getColor(),
+            'player_id' => $this->player ? $this->player->id : null,
+        ]);
+
+        return new TagResource($tag);
     }
 }

@@ -10,15 +10,30 @@ class TagsTest extends TestCase
 {
     use DatabaseTransactions, TagsTrait;
 
-    public function testTagsList()
+//    public function testTagsList()
+//    {
+//        $response = $this->getJson('api/tags/');
+//        $response->assertStatus(401);
+//
+//        $this->createTag();
+//        $this->withoutMiddleware();
+//        $response = $this->getJson('api/tags/');
+//        $response->assertStatus(200);
+//        $this->assertNotEmpty($response->getContent());
+//    }
+
+    public function testCreateTag()
     {
-        $response = $this->getJson('api/tags/');
+        $response = $this->postJson('api/tags/');
         $response->assertStatus(401);
 
-        $this->createTag();
         $this->withoutMiddleware();
-        $response = $this->getJson('api/tags/');
-        $response->assertStatus(200);
+        $response = $this->postJson('api/tags/', [
+            'name' => 'test',
+            'color' => '000000',
+        ]);
+
+        $response->assertStatus(201);
         $this->assertNotEmpty($response->getContent());
     }
 }
