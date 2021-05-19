@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\DTO\Tag\CreateDTO;
+use App\DTO\Tag\UpdateDTO;
 use App\Http\Requests\RequestsDTO\Tag\CreateRequest;
 use App\Http\Resources\TagResource;
 use App\Models\Player;
@@ -41,12 +42,37 @@ class TagService
      * @param CreateDTO $createDTO
      * @return TagResource
      */
-    public function createTag(CreateDTO $createDTO): TagResource
+    public function create(CreateDTO $createDTO): TagResource
     {
         $tag = Tags::create([
             'name' => $createDTO->getName(),
             'color' => $createDTO->getColor(),
             'player_id' => $this->player ? $this->player->id : null,
+        ]);
+
+        return new TagResource($tag);
+    }
+
+    /**
+     * @param int $id
+     * @param UpdateDTO $updateDTO
+     * @return TagResource
+     */
+    public function update(int $id, UpdateDTO $updateDTO): TagResource
+    {
+        $tag = Tags::select(['*']);
+            // TODO fix php8.0.6
+//            ->where('system', false);
+
+        if (!empty($this->player)) {
+            $tag = $tag->where('player_id', $this->player->id);
+        }
+
+        $tag = $tag->firstOrFail();
+
+        $tag->update([
+            'name' => $updateDTO->getName(),
+            'color' => $updateDTO->getColor()
         ]);
 
         return new TagResource($tag);

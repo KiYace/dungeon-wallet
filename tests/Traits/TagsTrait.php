@@ -6,8 +6,8 @@ use App\Models\Tags;
 
 trait TagsTrait
 {
-    protected function createTag(): Tags
+    protected function createTag(array $attributes = []): Tags
     {
-        return Tags::factory()->create();
+        return Tags::factory()->create($attributes);
     }
 }
