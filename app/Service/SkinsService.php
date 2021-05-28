@@ -11,12 +11,23 @@ class SkinsService
     /**
      * @return AnonymousResourceCollection
      */
-    public function skinsList()
+    public function skinsList(): AnonymousResourceCollection
     {
         $skins = Skin::select(['*'])
             ->orderBy('rating', 'asc')
             ->get();
 
         return SkinResource::collection($skins);
+    }
+
+    /**
+     * @param int $id
+     * @return SkinResource
+     */
+    public function getSkin(int $id): SkinResource
+    {
+        $skin = Skin::findOrFail($id);
+
+        return new SkinResource($skin);
     }
 }

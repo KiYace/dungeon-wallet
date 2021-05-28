@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SkinResource;
 use App\Service\SkinsService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -14,6 +15,9 @@ class SkinsController extends Controller
      *     summary="Скины",
      *     tags={"Skins"},
      *     description="Скины",
+     *     security={
+     *         {"bearer": {}},
+     *     },
      *     @OA\Response(
      *         response="200",
      *         description="Ok",
@@ -33,5 +37,44 @@ class SkinsController extends Controller
     {
         $SkinsService = new SkinsService();
         return $SkinsService->skinsList();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/skin/{id}",
+     *     summary="Скин",
+     *     tags={"Skins"},
+     *     description="Скин",
+     *     security={
+     *         {"bearer": {}},
+     *     },
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="id",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Ok",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 ref="#/components/schemas/Skin"
+     *             ),
+     *         )
+     *     )
+     * )
+     * @param $id
+     * @throws \Exception
+     * @return SkinResource
+     */
+    public function show(int $id): SkinResource
+    {
+        $SkinsService = new SkinsService();
+        return $SkinsService->getSkin($id);
     }
 }
