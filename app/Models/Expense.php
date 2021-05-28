@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $name
  * @property string $description
+ * @property string $player_id
  * @property int $category_id
  * @property string $repeat_at
  * @property float $sum

@@ -15,5 +15,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('expenses', 'App\Http\Controllers\API\ExpensesController@index');
-    Route::post('tags', 'App\Http\Controllers\API\TagsController@store');
+    Route::post('expenses', 'App\Http\Controllers\API\ExpensesController@store');
 });

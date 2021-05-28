@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SkinResource;
-use App\Service\SkinsService;
+use App\Service\SkinService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SkinsController extends Controller
@@ -35,7 +35,7 @@ class SkinsController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        $SkinsService = new SkinsService();
+        $SkinsService = new SkinService();
         return $SkinsService->skinsList();
     }
 
@@ -74,7 +74,7 @@ class SkinsController extends Controller
      */
     public function show(int $id): SkinResource
     {
-        $SkinsService = new SkinsService();
+        $SkinsService = new SkinService();
         return $SkinsService->getSkin($id);
     }
 }

@@ -6,7 +6,7 @@ use App\Http\Resources\SkinResource;
 use App\Models\Skin;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class SkinsService
+class SkinService
 {
     /**
      * @return AnonymousResourceCollection

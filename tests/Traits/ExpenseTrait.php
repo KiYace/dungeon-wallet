@@ -10,4 +10,9 @@ trait ExpenseTrait
     {
         return Expense::factory()->create();
     }
+
+    protected function makeExpense(): Expense
+    {
+        return Expense::factory()->make();
+    }
 }
