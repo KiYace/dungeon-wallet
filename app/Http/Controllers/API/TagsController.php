@@ -147,4 +147,36 @@ class TagsController extends Controller
         $TagService->setPlayer(Auth::user());
         return $TagService->update($id, $request->getDto());
     }
+
+    /**
+     * @OA\Delete(
+     *     path="/api/tags/{id}",
+     *     summary="Удаление тега",
+     *     tags={"Tags"},
+     *     description="Удаление тега",
+     *     security={
+     *         {"bearer": {}},
+     *     },
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="id",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Ok",
+     *     )
+     * )
+     * @param int $id
+     * @throws \Exception
+     */
+    public function delete(int $id): void
+    {
+        $TagService = new TagService();
+        $TagService->setPlayer(Auth::user());
+        $TagService->delete($id);
+    }
 }

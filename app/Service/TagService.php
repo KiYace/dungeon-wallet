@@ -77,4 +77,22 @@ class TagService
 
         return new TagResource($tag);
     }
+
+    /**
+     * @param int $id
+     */
+    public function delete(int $id): void
+    {
+        $tag = Tags::select(['*']);
+        // TODO fix php8.0.6
+//            ->where('system', false);
+
+        if (!empty($this->player)) {
+            $tag = $tag->where('player_id', $this->player->id);
+        }
+
+        $tag = $tag->firstOrFail();
+
+        $tag->delete();
+    }
 }
