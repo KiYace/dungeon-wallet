@@ -13,8 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('player', 'App\Http\Controllers\API\PlayerController@store');
-Route::middleware('auth:sanctum')
-    ->put('player', 'App\Http\Controllers\API\PlayerController@update');
-Route::middleware('auth:sanctum')
-    ->put('player/change_password', 'App\Http\Controllers\API\PlayerController@changePassword');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('tags', 'App\Http\Controllers\API\TagsController@index');
+    Route::post('tags', 'App\Http\Controllers\API\TagsController@store');
+    Route::put('tags/{id}', 'App\Http\Controllers\API\TagsController@update');
+    Route::delete('tags/{id}', 'App\Http\Controllers\API\TagsController@delete');
+});

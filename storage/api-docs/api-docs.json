@@ -96,6 +96,57 @@
             }
         },
         "/api/player/": {
+            "put": {
+                "tags": [
+                    "Player"
+                ],
+                "summary": "Изменение данных игрока",
+                "description": "Изменение данных игрока",
+                "operationId": "App\\Http\\Controllers\\API\\PlayerController::update",
+                "requestBody": {
+                    "description": "Pass user credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nickname": {
+                                        "description": "nickname",
+                                        "type": "string"
+                                    },
+                                    "skin": {
+                                        "description": "ID скина",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Player"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Player"
@@ -167,6 +218,63 @@
                 }
             }
         },
+        "/api/player/change_password": {
+            "put": {
+                "tags": [
+                    "Player"
+                ],
+                "summary": "Изменение пароля",
+                "description": "Изменение пароля",
+                "operationId": "App\\Http\\Controllers\\API\\PlayerController::changePassword",
+                "requestBody": {
+                    "description": "Pass user credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "password_old": {
+                                        "description": "Пароль",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Пароль",
+                                        "type": "string"
+                                    },
+                                    "password_confirm": {
+                                        "description": "Подтверждение пароля",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Player"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/api/skins": {
             "get": {
                 "tags": [
@@ -196,10 +304,223 @@
                     }
                 }
             }
+        },
+        "/api/tags": {
+            "get": {
+                "tags": [
+                    "Tags"
+                ],
+                "summary": "Теги",
+                "description": "Теги",
+                "operationId": "App\\Http\\Controllers\\API\\TagsController::index",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Tag"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Tags"
+                ],
+                "summary": "Создание тега",
+                "description": "Создание тега",
+                "operationId": "App\\Http\\Controllers\\API\\TagsController::store",
+                "requestBody": {
+                    "description": "Pass user credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Название",
+                                        "type": "string"
+                                    },
+                                    "color": {
+                                        "description": "Цвет",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Tag"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/tags/{id}": {
+            "put": {
+                "tags": [
+                    "Tags"
+                ],
+                "summary": "Изменения тега",
+                "description": "Изменения тега",
+                "operationId": "App\\Http\\Controllers\\API\\TagsController::update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Pass user credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Название",
+                                        "type": "string"
+                                    },
+                                    "color": {
+                                        "description": "Цвет",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Tag"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Tags"
+                ],
+                "summary": "Удаление тега",
+                "description": "Удаление тега",
+                "operationId": "App\\Http\\Controllers\\API\\TagsController::delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
         }
     },
     "components": {
         "schemas": {
+            "Level": {
+                "properties": {
+                    "id": {
+                        "description": "ID",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "player_id": {
+                        "description": "ID пользователя",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "level": {
+                        "description": "Уровень",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "exp": {
+                        "description": "Опыт",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "points": {
+                        "description": "Очки",
+                        "type": "integer",
+                        "readOnly": true
+                    }
+                },
+                "type": "object"
+            },
             "Player": {
                 "properties": {
                     "id": {
@@ -255,6 +576,31 @@
                     "skin": {
                         "description": "Скин",
                         "type": "string",
+                        "readOnly": true
+                    }
+                },
+                "type": "object"
+            },
+            "Tag": {
+                "properties": {
+                    "id": {
+                        "description": "ID",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "description": "Назавние",
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "rating": {
+                        "description": "color",
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "skin": {
+                        "description": "system",
+                        "type": "integer",
                         "readOnly": true
                     }
                 },

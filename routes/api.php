@@ -26,3 +26,4 @@ Route::group([
 
 require __DIR__ . '/API/skins.php';
 require __DIR__ . '/API/player.php';
+require __DIR__ . '/API/tags.php';

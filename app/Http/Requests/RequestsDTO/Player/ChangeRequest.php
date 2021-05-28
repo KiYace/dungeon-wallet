@@ -2,18 +2,15 @@
 
 namespace App\Http\Requests\RequestsDTO\Player;
 
-use App\DTO\Player\RegisterDTO;
+use App\DTO\Player\ChangeDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterRequest extends FormRequest
+class ChangeRequest extends FormRequest
 {
     public function rules()
     {
         return [
             'nickname' => 'required|min:4|max:15|unique:players',
-            'mail' => 'required|email|unique:players',
-            'password' => 'required|min:6',
-            'password_confirm' => 'required|same:password',
             'skin' => 'required|integer|exists:skins,id',
         ];
     }
@@ -23,15 +20,11 @@ class RegisterRequest extends FormRequest
         return true;
     }
 
-    public function getDto(): RegisterDTO
+    public function getDto(): ChangeDTO
     {
-        return new RegisterDTO(
+        return new ChangeDTO(
             $this->get('nickname'),
-            $this->get('mail'),
-            $this->get('password'),
             $this->get('skin'),
-            $this->get('push_enabled'),
-            $this->get('push_token'),
         );
     }
 
@@ -42,11 +35,6 @@ class RegisterRequest extends FormRequest
             'nickname.required' => 'Никнейм обязателен для заполнения',
             'nickname.min' => 'Никнейм должен содержаь более 4 символов',
             'nickname.max' => 'Никнейм должен содержаь менее 14 символов',
-            'mail.unique' => 'Данный почтовый ящик уже используется',
-            'mail.*' => 'Непрвильно заполнена почта',
-            'password.min' => 'Пароль должен содержать более 6 символов',
-            'password.*' => 'Пароль обязателен для заполнения',
-            'password_confirm.*' => 'Пароли не совпадают',
             'skin.required' => 'Не выбран скин для персонажа',
             'skin.exists' => 'Данный скин персонажа недоступен',
         ];

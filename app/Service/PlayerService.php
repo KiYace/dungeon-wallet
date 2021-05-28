@@ -2,10 +2,15 @@
 
 namespace App\Service;
 
+use App\DTO\Player\ChangeDTO;
+use App\DTO\Player\ChangePasswordDTO;
 use App\DTO\Player\RegisterDTO;
+use App\Http\Resources\Player\LevelResource;
 use App\Http\Resources\PlayerResource;
 use App\Models\Player;
+use App\Service\Player\LevelService;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use JetBrains\PhpStorm\Pure;
 use Psr\Log\LoggerInterface;
@@ -66,9 +71,46 @@ class PlayerService
         $AuthService->setPlayer($player);
         $token = $AuthService->generateToken('');
 
+        $LevelService = new LevelService();
+        $LevelService->setLogger($this->logger);
+        $LevelService->setPlayer($player);
+        $level = $LevelService->createFirstLevel();
+
         return (new PlayerResource($player))
             ->additional([
-                'token' => $token
+                'token' => $token,
+                'level' => new LevelResource($level),
             ]);
+    }
+
+    /**
+     * @param ChangeDTO $changeDTO
+     * @return PlayerResource
+     */
+    public function change(ChangeDTO $changeDTO): PlayerResource
+    {
+        $this->player->update([
+            'nickname' => $changeDTO->getNickname(),
+            'skin_id' => $changeDTO->getSkin(),
+        ]);
+
+        return new PlayerResource($this->player);
+    }
+
+    /**
+     * @param ChangePasswordDTO $changePasswordDTO
+     * @throws \InvalidArgumentException
+     * @return \Illuminate\Http\Response
+     */
+    public function changePassword(ChangePasswordDTO $changePasswordDTO): Response
+    {
+       if(!Hash::check($changePasswordDTO->getPasswordOld(), $this->player->password)) {
+           throw new \InvalidArgumentException('Старый пароль введен неверно');
+       }
+
+       $this->player->password = Hash::make($changePasswordDTO->getPassword());
+       $this->player->save();
+
+       return response('Пароль успешно изменен', 200);
     }
 }

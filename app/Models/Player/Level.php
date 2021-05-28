@@ -1,38 +1,40 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Player;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Tags
+ * Class Player
  * @package App\Models
  * @property int $id
- * @property string $name
- * @property string $color
  * @property int $player_id
- * @property boolean $system
+ * @property int $level
+ * @property int $exp
+ * @property int $points
+ * @property \DateTime $created_at
+ * @property \DateTime $updated_at
  */
-class Tags extends Model
+class Level extends Model
 {
-    use CrudTrait, HasFactory;
-
+    const START_LEVEL = 1;
+    const START_EXP = 100;
+    const START_POINTS = 100;
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'tags';
+    protected $table = 'player_levels';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
     // protected $fillable = [];
-     protected $hidden = [
-         'player_id'
-     ];
+      protected $hidden = [
+          'created_at',
+          'updated_at'
+      ];
     // protected $dates = [];
 
     /*
@@ -46,11 +48,6 @@ class Tags extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
-    public function player()
-    {
-        return $this->belongsTo(Player::class);
-    }
 
     /*
     |--------------------------------------------------------------------------
