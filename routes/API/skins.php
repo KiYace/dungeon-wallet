@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('skins', 'App\Http\Controllers\API\SkinsController', [
-    'only' => ['index'],
-]);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('skins', 'App\Http\Controllers\API\SkinsController@index');
+    Route::get('skins/{id}', 'App\Http\Controllers\API\SkinsController@show');
+});

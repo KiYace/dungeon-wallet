@@ -3,17 +3,28 @@
 namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Expense
+ * @package App\Models
+ * @property int $id
+ * @property string $name
+ * @property string $description
+ * @property string $player_id
+ * @property int $category_id
+ * @property string $repeat_at
+ * @property float $sum
+ */
 class Expense extends Model
 {
-    use CrudTrait;
+    use CrudTrait, HasFactory;
 
-    /*
-    |--------------------------------------------------------------------------
-    | GLOBAL VARIABLES
-    |--------------------------------------------------------------------------
-    */
+    const REPEAT_AT_DAY = 'day';
+    const REPEAT_AT_WEEK = 'week';
+    const REPEAT_AT_MONTH = 'month';
+    const NOT_REPEAT = 'not';
 
     protected $table = 'expenses';
     // protected $primaryKey = 'id';
@@ -28,6 +39,16 @@ class Expense extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+
+    public static function getExpensesRepeatTypeList()
+    {
+        return [
+            self::REPEAT_AT_DAY => 'Каждый день',
+            self::REPEAT_AT_WEEK => 'Каждую неделю',
+            self::REPEAT_AT_MONTH => 'Каждый месяц',
+            self::NOT_REPEAT => 'Нет повторов',
+        ];
+    }
 
     /*
     |--------------------------------------------------------------------------
