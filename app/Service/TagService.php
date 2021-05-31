@@ -4,16 +4,21 @@ namespace App\Service;
 
 use App\DTO\Tag\CreateDTO;
 use App\DTO\Tag\UpdateDTO;
-use App\Http\Requests\RequestsDTO\Tag\CreateRequest;
 use App\Http\Resources\TagResource;
 use App\Models\Player;
 use App\Models\Tags;
+use App\Repository\Tag\TagRepository;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class TagService
 {
     private Player|Authenticatable|null $player;
+    private TagRepository $tagRepository;
+
+    public function __construct(TagRepository $tagRepository)
+    {
+        $this->tagRepository = $tagRepository;
+    }
 
     /**
      * @param Player|Authenticatable|null $player
@@ -24,32 +29,17 @@ class TagService
     }
 
     /**
-     * @return AnonymousResourceCollection
-     */
-    public function tagsList()
-    {
-        $tags = Tags::select(['*'])
-            ->orderBy('system', 'desc')
-            // TODO php8.0.6 fix
-//            ->where('system', true)
-//            ->orWhere('player_id', $this->player->id)
-            ->get();
-
-        return TagResource::collection($tags);
-    }
-
-    /**
      * @param CreateDTO $createDTO
      * @return TagResource
      */
     public function create(CreateDTO $createDTO): TagResource
     {
-        $tag = Tags::create([
-            'name' => $createDTO->getName(),
-            'color' => $createDTO->getColor(),
-            'player_id' => $this->player ? $this->player->id : null,
-        ]);
+        $tag = new Tags();
+        $tag->name = $createDTO->getName();
+        $tag->color = $createDTO->getName();
+        $tag->player_id = $this->player ? $this->player->id : null;
 
+        $tag = $this->tagRepository->save($tag);
         return new TagResource($tag);
     }
 
@@ -70,10 +60,10 @@ class TagService
 
         $tag = $tag->firstOrFail();
 
-        $tag->update([
-            'name' => $updateDTO->getName(),
-            'color' => $updateDTO->getColor()
-        ]);
+        $tag->name = $updateDTO->getName();
+        $tag->color = $updateDTO->getColor();
+
+        $tag = $this->tagRepository->save($tag);
 
         return new TagResource($tag);
     }
@@ -93,6 +83,6 @@ class TagService
 
         $tag = $tag->firstOrFail();
 
-        $tag->delete();
+        $this->tagRepository->delete($tag);
     }
 }

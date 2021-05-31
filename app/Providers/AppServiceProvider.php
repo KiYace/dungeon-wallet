@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        app()->bind(ImageUploader::class, ImageLocalUploader::class);
     }
 
     /**
@@ -25,6 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        app()->bind(ImageUploader::class, ImageLocalUploader::class);
+
     }
 }

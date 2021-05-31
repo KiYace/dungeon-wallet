@@ -18,6 +18,8 @@ class TagsTest extends TestCase
         $this->createTag();
         $this->withoutMiddleware();
         $response = $this->getJson('api/tags/');
+
+        print_r($response->getContent());
         $response->assertStatus(200);
         $this->assertNotEmpty($response->getContent());
     }
