@@ -95,7 +95,7 @@ class TagsController extends Controller
     {
         $TagService = new TagService($this->tagRepository);
         $TagService->setPlayer(Auth::user());
-        return $TagService->create($request->getDto());
+        return new TagResource($TagService->create($request->getDto()));
     }
 
     /**
@@ -152,7 +152,7 @@ class TagsController extends Controller
     {
         $TagService = new TagService($this->tagRepository);
         $TagService->setPlayer(Auth::user());
-        return $TagService->update($id, $request->getDto());
+        return new TagResource($TagService->update($id, $request->getDto()));
     }
 
     /**

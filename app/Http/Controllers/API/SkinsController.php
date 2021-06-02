@@ -4,11 +4,19 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SkinResource;
+use App\Repository\Skin\SkinRepository;
 use App\Service\SkinService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SkinsController extends Controller
 {
+    private SkinRepository $skinRepo;
+
+    public function __construct(SkinRepository $skinRepo)
+    {
+        $this->skinRepo = $skinRepo;
+    }
+
     /**
      * @OA\Get(
      *     path="/api/skins",

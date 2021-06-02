@@ -7,7 +7,7 @@ use App\Models\Tags;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
 
-class EloquentTagRepository implements TagRepository
+class EloquentTagRepository implements SkinRepository
 {
     public function findAllByPlayerOrSystem(Player|Authenticatable|null $player): ?Collection
     {

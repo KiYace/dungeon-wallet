@@ -4,18 +4,17 @@ namespace App\Service;
 
 use App\DTO\Tag\CreateDTO;
 use App\DTO\Tag\UpdateDTO;
-use App\Http\Resources\TagResource;
 use App\Models\Player;
 use App\Models\Tags;
-use App\Repository\Tag\TagRepository;
+use App\Repository\Tag\SkinRepository;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 class TagService
 {
     private Player|Authenticatable|null $player;
-    private TagRepository $tagRepository;
+    private SkinRepository $tagRepository;
 
-    public function __construct(TagRepository $tagRepository)
+    public function __construct(SkinRepository $tagRepository)
     {
         $this->tagRepository = $tagRepository;
     }
@@ -30,9 +29,9 @@ class TagService
 
     /**
      * @param CreateDTO $createDTO
-     * @return TagResource
+     * @return Tags
      */
-    public function create(CreateDTO $createDTO): TagResource
+    public function create(CreateDTO $createDTO): Tags
     {
         $tag = new Tags();
         $tag->name = $createDTO->getName();
@@ -40,15 +39,15 @@ class TagService
         $tag->player_id = $this->player ? $this->player->id : null;
 
         $tag = $this->tagRepository->save($tag);
-        return new TagResource($tag);
+        return $tag;
     }
 
     /**
      * @param int $id
      * @param UpdateDTO $updateDTO
-     * @return TagResource
+     * @return Tags
      */
-    public function update(int $id, UpdateDTO $updateDTO): TagResource
+    public function update(int $id, UpdateDTO $updateDTO): Tags
     {
         $tag = Tags::select(['*']);
             // TODO fix php8.0.6
@@ -65,7 +64,7 @@ class TagService
 
         $tag = $this->tagRepository->save($tag);
 
-        return new TagResource($tag);
+        return $tag;
     }
 
     /**
