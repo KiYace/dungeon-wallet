@@ -6,15 +6,15 @@ use App\DTO\Tag\CreateDTO;
 use App\DTO\Tag\UpdateDTO;
 use App\Models\Player;
 use App\Models\Tags;
-use App\Repository\Tag\SkinRepository;
+use App\Repository\Tag\TagRepository;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 class TagService
 {
     private Player|Authenticatable|null $player;
-    private SkinRepository $tagRepository;
+    private TagRepository $tagRepository;
 
-    public function __construct(SkinRepository $tagRepository)
+    public function __construct(TagRepository $tagRepository)
     {
         $this->tagRepository = $tagRepository;
     }

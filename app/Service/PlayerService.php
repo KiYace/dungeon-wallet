@@ -5,10 +5,8 @@ namespace App\Service;
 use App\DTO\Player\ChangeDTO;
 use App\DTO\Player\ChangePasswordDTO;
 use App\DTO\Player\RegisterDTO;
-use App\Http\Resources\Player\LevelResource;
-use App\Http\Resources\PlayerResource;
 use App\Models\Player;
-use App\Service\Player\LevelService;
+use App\Repository\Player\PlayerRepository;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -21,11 +19,13 @@ class PlayerService
     private Player|Authenticatable|null $player;
 
     private LoggerInterface $logger;
+    private PlayerRepository $playerRepo;
 
     #[Pure]
-    public function __construct()
+    public function __construct(PlayerRepository $playerRepo)
     {
         $this->logger = new NullLogger();
+        $this->playerRepo = $playerRepo;
     }
 
     /**
@@ -46,9 +46,9 @@ class PlayerService
 
     /**
      * @param RegisterDTO $registerDTO
-     * @return PlayerResource
+     * @return Player
      */
-    public function register(RegisterDTO $registerDTO): PlayerResource
+    public function register(RegisterDTO $registerDTO): Player
     {
         $this->logger->notice('register new player', [
             'nickname' => $registerDTO->getNickname(),
@@ -56,45 +56,30 @@ class PlayerService
         ]);
 
         // TODO вынести пуш токены в отдельную таблицу
-        $player = Player::create([
-            'nickname' => $registerDTO->getNickname(),
-            'mail' => $registerDTO->getEmail(),
-            'password' => Hash::make($registerDTO->getPassword()),
-            'skin_id' => $registerDTO->getSkin(),
-            // TODO fix push_enabled
-//            'push_enabled' => (bool) $registerDTO->isPushEnabled(),
-            'push_token' => $registerDTO->getPushToken()
-        ]);
+        $player = new Player();
+        $player->nickname = $registerDTO->getNickname();
+        $player->mail = $registerDTO->getEmail();
+        $player->password = Hash::make($registerDTO->getPassword());
+        $player->skin_id = $registerDTO->getSkin();
+        $player->push_token = $registerDTO->getPushToken();
 
-        $AuthService = new AuthService();
-        $AuthService->setLogger($this->logger);
-        $AuthService->setPlayer($player);
-        $token = $AuthService->generateToken('');
+        $player = $this->playerRepo->save($player);
 
-        $LevelService = new LevelService();
-        $LevelService->setLogger($this->logger);
-        $LevelService->setPlayer($player);
-        $level = $LevelService->createFirstLevel();
-
-        return (new PlayerResource($player))
-            ->additional([
-                'token' => $token,
-                'level' => new LevelResource($level),
-            ]);
+        return $player;
     }
 
     /**
      * @param ChangeDTO $changeDTO
-     * @return PlayerResource
+     * @return Player
      */
-    public function change(ChangeDTO $changeDTO): PlayerResource
+    public function change(ChangeDTO $changeDTO): Player
     {
-        $this->player->update([
-            'nickname' => $changeDTO->getNickname(),
-            'skin_id' => $changeDTO->getSkin(),
-        ]);
+        $this->player->nickname = $changeDTO->getNickname();
+        $this->player->skin_id = $changeDTO->getSkin();
 
-        return new PlayerResource($this->player);
+        $this->player = $this->playerRepo->save($this->player);
+
+        return $this->player;
     }
 
     /**
@@ -109,7 +94,7 @@ class PlayerService
        }
 
        $this->player->password = Hash::make($changePasswordDTO->getPassword());
-       $this->player->save();
+       $this->player = $this->playerRepo->save($this->player);
 
        return response('Пароль успешно изменен', 200);
     }

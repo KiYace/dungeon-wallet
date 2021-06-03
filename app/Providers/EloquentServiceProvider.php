@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
+use App\Repository\Player\EloquentLevelRepository;
+use App\Repository\Player\EloquentPlayerRepository;
+use App\Repository\Player\LevelRepository;
+use App\Repository\Player\PlayerRepository;
+use App\Repository\Skin\EloquentSkinRepository;
 use App\Repository\Skin\SkinRepository;
-use App\Repository\Tag\EloquentSkinRepository;
 use App\Repository\Tag\EloquentTagRepository;
 use App\Repository\Tag\TagRepository;
 use Illuminate\Support\ServiceProvider;
@@ -26,6 +30,14 @@ class EloquentServiceProvider extends ServiceProvider
             [
                 SkinRepository::class,
                 EloquentSkinRepository::class
+            ],
+            [
+                PlayerRepository::class,
+                EloquentPlayerRepository::class
+            ],
+            [
+                LevelRepository::class,
+                EloquentLevelRepository::class
             ]
         ];
 
