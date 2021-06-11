@@ -14,7 +14,7 @@ use Psr\Log\NullLogger;
 
 class ExpenseService
 {
-    private Player|Authenticatable|null $player;
+    private Player|Authenticatable $player;
 
     private LoggerInterface $logger;
 

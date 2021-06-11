@@ -11,7 +11,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 
 class TagService
 {
-    private Player|Authenticatable|null $player;
+    private Player|Authenticatable $player;
     private TagRepository $tagRepository;
 
     public function __construct(TagRepository $tagRepository)
@@ -20,9 +20,9 @@ class TagService
     }
 
     /**
-     * @param Player|Authenticatable|null $player
+     * @param Player|Authenticatable $player
      */
-    public function setPlayer(Player|Authenticatable|null $player): void
+    public function setPlayer(Player|Authenticatable $player): void
     {
         $this->player = $player;
     }

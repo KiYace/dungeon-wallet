@@ -16,7 +16,7 @@ use Psr\Log\NullLogger;
 
 class PlayerService
 {
-    private Player|Authenticatable|null $player;
+    private Player|Authenticatable $player;
 
     private LoggerInterface $logger;
     private PlayerRepository $playerRepo;

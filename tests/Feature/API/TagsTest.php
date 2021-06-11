@@ -4,12 +4,14 @@ namespace Tests\Feature\API;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
+use Tests\Traits\PlayerTrait;
 use Tests\Traits\TagsTrait;
 
 class TagsTest extends TestCase
 {
     use DatabaseTransactions;
     use TagsTrait;
+    use PlayerTrait;
 
     public function testTagsList()
     {
@@ -30,6 +32,7 @@ class TagsTest extends TestCase
         $response->assertStatus(401);
 
         $this->withoutMiddleware();
+        $this->mockPlayer();
 
         $response = $this->postJson('api/tags/', [
             'name' => 'test',
@@ -42,15 +45,15 @@ class TagsTest extends TestCase
 
     public function testUpdateTag()
     {
+        $player = $this->mockPlayer();
         $tag = $this->createTag([
             // TODO fix php8.0.6
+            'player_id' => $player->id,
 //            'system' => false
         ]);
 
-        $response = $this->putJson('api/tags/' . $tag->id);
-        $response->assertStatus(401);
-
         $this->withoutMiddleware();
+
         $response = $this->putJson('api/tags/' . $tag->id, [
             'name' => 'test',
             'color' => '000000',

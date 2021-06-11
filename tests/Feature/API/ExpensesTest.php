@@ -5,10 +5,13 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Traits\ExpenseTrait;
+use Tests\Traits\PlayerTrait;
 
 class ExpensesTest extends TestCase
 {
-    use DatabaseTransactions, ExpenseTrait;
+    use DatabaseTransactions;
+    use ExpenseTrait;
+    use PlayerTrait;
 
     public function testExpensesList()
     {
@@ -28,6 +31,8 @@ class ExpensesTest extends TestCase
         $response->assertStatus(401);
 
         $this->withoutMiddleware();
+        $this->mockPlayer();
+
         $expense = $this->makeExpense();
         $response = $this->postJson('api/expenses/', [
             'name' => $expense->name,

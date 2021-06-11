@@ -11,7 +11,7 @@ use Psr\Log\NullLogger;
 
 class LevelService
 {
-    public Player|Authenticatable|null $player;
+    public Player|Authenticatable $player;
 
     private LoggerInterface $logger;
     private LevelRepository $levelRepo;
