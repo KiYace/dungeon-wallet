@@ -4,11 +4,18 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SkinResource;
-use App\Service\SkinService;
+use App\Repository\Skin\SkinRepository;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SkinsController extends Controller
 {
+    private SkinRepository $skinRepo;
+
+    public function __construct(SkinRepository $skinRepo)
+    {
+        $this->skinRepo = $skinRepo;
+    }
+
     /**
      * @OA\Get(
      *     path="/api/skins",
@@ -35,8 +42,8 @@ class SkinsController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        $SkinsService = new SkinService();
-        return $SkinsService->skinsList();
+        $skins = $this->skinRepo->findAll();
+        return SkinResource::collection($skins);
     }
 
     /**
@@ -74,7 +81,7 @@ class SkinsController extends Controller
      */
     public function show(int $id): SkinResource
     {
-        $SkinsService = new SkinService();
-        return $SkinsService->getSkin($id);
+        $skin = $this->skinRepo->find($id);
+        return new SkinResource($skin);
     }
 }

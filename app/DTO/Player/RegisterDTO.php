@@ -63,7 +63,7 @@ final class RegisterDTO
     /**
      * @return bool|null
      */
-    public function getPushEnabled(): ?bool
+    public function isPushEnabled(): ?bool
     {
         return $this->push_enabled;
     }

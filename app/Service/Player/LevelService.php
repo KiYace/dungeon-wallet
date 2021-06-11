@@ -3,6 +3,7 @@
 namespace App\Service\Player;
 
 use App\Models\Player;
+use App\Repository\Player\LevelRepository;
 use Illuminate\Contracts\Auth\Authenticatable;
 use JetBrains\PhpStorm\Pure;
 use Psr\Log\LoggerInterface;
@@ -13,11 +14,13 @@ class LevelService
     public Player|Authenticatable|null $player;
 
     private LoggerInterface $logger;
+    private LevelRepository $levelRepo;
 
     #[Pure]
-    public function __construct()
+    public function __construct(LevelRepository $levelRepo)
     {
         $this->logger = new NullLogger();
+        $this->levelRepo = $levelRepo;
     }
 
     /**
@@ -41,12 +44,13 @@ class LevelService
      */
     public function createFirstLevel(): Player\Level
     {
-        $level = Player\Level::create([
-            'player_id' => $this->player->id,
-            'level' => Player\Level::START_LEVEL,
-            'exp' => Player\Level::START_EXP,
-            'points' => Player\Level::START_POINTS,
-        ]);
+        $level = new Player\Level();
+        $level->player_id = $this->player->id;
+        $level->level = Player\Level::START_LEVEL;
+        $level->exp = Player\Level::START_EXP;
+        $level->points = Player\Level::START_POINTS;
+
+        $level = $this->levelRepo->save($level);
 
         return $level;
     }

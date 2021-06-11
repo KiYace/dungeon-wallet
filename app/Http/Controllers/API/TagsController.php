@@ -6,12 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestsDTO\Tag\CreateRequest;
 use App\Http\Requests\RequestsDTO\Tag\UpdateRequest;
 use App\Http\Resources\TagResource;
+use App\Repository\Tag\TagRepository;
 use App\Service\TagService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 
 class TagsController extends Controller
 {
+    private TagRepository $tagRepository;
+
+    public function __construct(TagRepository $tagRepository)
+    {
+        $this->tagRepository = $tagRepository;
+    }
+
     /**
      * @OA\Get(
      *     path="/api/tags",
@@ -38,9 +46,8 @@ class TagsController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        $TagService = new TagService();
-        $TagService->setPlayer(Auth::user());
-        return $TagService->tagsList();
+        $tags = $this->tagRepository->findAllByPlayerOrSystem(Auth::user());
+        return TagResource::collection($tags);
     }
 
     /**
@@ -86,9 +93,9 @@ class TagsController extends Controller
      */
     public function store(CreateRequest $request): TagResource
     {
-        $TagService = new TagService();
+        $TagService = new TagService($this->tagRepository);
         $TagService->setPlayer(Auth::user());
-        return $TagService->create($request->getDto());
+        return new TagResource($TagService->create($request->getDto()));
     }
 
     /**
@@ -143,9 +150,9 @@ class TagsController extends Controller
      */
     public function update(int $id, UpdateRequest $request): TagResource
     {
-        $TagService = new TagService();
+        $TagService = new TagService($this->tagRepository);
         $TagService->setPlayer(Auth::user());
-        return $TagService->update($id, $request->getDto());
+        return new TagResource($TagService->update($id, $request->getDto()));
     }
 
     /**
@@ -175,7 +182,7 @@ class TagsController extends Controller
      */
     public function delete(int $id): void
     {
-        $TagService = new TagService();
+        $TagService = new TagService($this->tagRepository);
         $TagService->setPlayer(Auth::user());
         $TagService->delete($id);
     }

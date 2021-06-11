@@ -6,13 +6,27 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestsDTO\Player\ChangePasswordRequest;
 use App\Http\Requests\RequestsDTO\Player\ChangeRequest;
 use App\Http\Requests\RequestsDTO\Player\RegisterRequest;
+use App\Http\Resources\Player\LevelResource;
 use App\Http\Resources\PlayerResource;
+use App\Repository\Player\LevelRepository;
+use App\Repository\Player\PlayerRepository;
+use App\Service\AuthService;
+use App\Service\Player\LevelService;
 use App\Service\PlayerService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class PlayerController extends Controller
 {
+    private PlayerRepository $playerRepo;
+    private LevelRepository $levelRepo;
+
+    public function __construct(PlayerRepository $playerRepo, LevelRepository $levelRepo)
+    {
+        $this->playerRepo = $playerRepo;
+        $this->levelRepo = $levelRepo;
+    }
+
     /**
      * @OA\Post(
      *     path="/api/player/",
@@ -83,8 +97,22 @@ class PlayerController extends Controller
      */
     public function store(RegisterRequest $request): PlayerResource
     {
-        $PlayerService = new PlayerService();
-        return $PlayerService->register($request->getDto());
+        $PlayerService = new PlayerService($this->playerRepo);
+        $player = $PlayerService->register($request->getDto());
+        $AuthService = new AuthService();
+
+        $AuthService->setPlayer($player);
+        $token = $AuthService->generateToken('');
+
+        $LevelService = new LevelService($this->levelRepo);
+        $LevelService->setPlayer($player);
+        $level = $LevelService->createFirstLevel();
+
+        return (new PlayerResource($player))
+            ->additional([
+                'token' => $token,
+                'level' => new LevelResource($level),
+            ]);
     }
 
     /**
@@ -131,9 +159,11 @@ class PlayerController extends Controller
     public function update(ChangeRequest $request): PlayerResource
     {
         $Player = Auth::user();
-        $PlayerService = new PlayerService();
+        $PlayerService = new PlayerService($this->playerRepo);
         $PlayerService->setPlayer($Player);
-        return $PlayerService->change($request->getDto());
+        $player = $PlayerService->change($request->getDto());
+
+        return new PlayerResource($player);
     }
 
     /**
@@ -185,8 +215,10 @@ class PlayerController extends Controller
     public function changePassword(ChangePasswordRequest $request): Response
     {
         $Player = Auth::user();
-        $PlayerService = new PlayerService();
+        $PlayerService = new PlayerService($this->playerRepo);
         $PlayerService->setPlayer($Player);
-        return $PlayerService->changePassword($request->getDto());
+        $response = $PlayerService->changePassword($request->getDto());
+
+        return $response;
     }
 }

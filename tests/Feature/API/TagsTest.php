@@ -8,7 +8,8 @@ use Tests\Traits\TagsTrait;
 
 class TagsTest extends TestCase
 {
-    use DatabaseTransactions, TagsTrait;
+    use DatabaseTransactions;
+    use TagsTrait;
 
     public function testTagsList()
     {
@@ -18,6 +19,7 @@ class TagsTest extends TestCase
         $this->createTag();
         $this->withoutMiddleware();
         $response = $this->getJson('api/tags/');
+
         $response->assertStatus(200);
         $this->assertNotEmpty($response->getContent());
     }
@@ -28,6 +30,7 @@ class TagsTest extends TestCase
         $response->assertStatus(401);
 
         $this->withoutMiddleware();
+
         $response = $this->postJson('api/tags/', [
             'name' => 'test',
             'color' => '000000',
