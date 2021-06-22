@@ -5,12 +5,20 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestsDTO\Expense\CreateRequest;
 use App\Http\Resources\ExpenseResource;
+use App\Repository\Expense\ExpenseRepository;
 use App\Service\ExpenseService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 
 class ExpensesController extends Controller
 {
+    private ExpenseRepository $expenseRepo;
+
+    public function __construct(ExpenseRepository $expenseRepo)
+    {
+        $this->expenseRepo = $expenseRepo;
+    }
+
     /**
      * @OA\Get(
      *     path="/api/expenses",
@@ -34,8 +42,9 @@ class ExpensesController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        $ExpensesService = new ExpenseService();
-        return $ExpensesService->expensesList();
+        $ExpensesService = new ExpenseService($this->expenseRepo);
+        $ExpensesService->setPlayer(Auth::user());
+        return ExpenseResource::collection($ExpensesService->expensesList());
     }
 
     /**
@@ -81,8 +90,8 @@ class ExpensesController extends Controller
      */
     public function store(CreateRequest $request): ExpenseResource
     {
-        $ExpenseService = new ExpenseService();
+        $ExpenseService = new ExpenseService($this->expenseRepo);
         $ExpenseService->setPlayer(Auth::user());
-        return $ExpenseService->create($request->getDto());
+        return new ExpenseResource($ExpenseService->create($request->getDto()));
     }
 }

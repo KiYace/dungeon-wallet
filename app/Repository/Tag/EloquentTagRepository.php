@@ -24,7 +24,6 @@ class EloquentTagRepository implements TagRepository
     public function save(Tags $tag): Tags
     {
         $tag->save();
-
         return $tag;
     }
 

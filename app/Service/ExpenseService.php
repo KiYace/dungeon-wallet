@@ -3,25 +3,28 @@
 namespace App\Service;
 
 use App\DTO\Expense\CreateDTO;
-use App\Http\Resources\ExpenseResource;
 use App\Models\Expense;
 use App\Models\Player;
+use App\Repository\Expense\ExpenseRepository;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use JetBrains\PhpStorm\Pure;
+use Illuminate\Database\Eloquent\Collection;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 class ExpenseService
 {
     private Player|Authenticatable $player;
-
     private LoggerInterface $logger;
+    private ExpenseRepository $expenseRepo;
 
-    #[Pure]
-    public function __construct()
+    /**
+     * ExpenseService constructor.
+     * @param ExpenseRepository $expenseRepo
+     */
+    public function __construct(ExpenseRepository $expenseRepo)
     {
         $this->logger = new NullLogger();
+        $this->expenseRepo = $expenseRepo;
     }
 
     /**
@@ -41,37 +44,29 @@ class ExpenseService
     }
 
     /**
-     * @return AnonymousResourceCollection
+     * @return Collection
      */
     public function expensesList()
     {
-        $expenses = Expense::select(['*'])
-            ->orderBy('created_at', 'desc');
-
-        if (isset($this->palyer)) {
-            $expenses->where('player_id', $this->player->id);
-        }
-
-        $expenses = $expenses->get();
-
-        return ExpenseResource::collection($expenses);
+        $expenses = $this->expenseRepo->findAllByPlayer($this->player);
+        return $expenses;
     }
 
     /**
      * @param CreateDTO $createDTO
-     * @return ExpenseResource
+     * @return Expense
      */
-    public function create(CreateDTO $createDTO): ExpenseResource
+    public function create(CreateDTO $createDTO): Expense
     {
-        $expense = Expense::create([
-            'name' => $createDTO->getName(),
-            'description' => $createDTO->getDescription(),
-            'player_id' => $this->player ? $this->player->id : null,
-            'category_id' => $createDTO->getCategoryId(),
-            'repeat_at' => $createDTO->getRepeatAt(),
-            'sum' => $createDTO->getSum(),
-        ]);
+        $expense = new Expense();
+        $expense->name = $createDTO->getName();
+        $expense->description = $createDTO->getDescription();
+        $expense->player_id = $this->player->id;
+        $expense->category_id = $createDTO->getCategoryId();
+        $expense->repeat_at = $createDTO->getRepeatAt();
+        $expense->sum = $createDTO->getSum();
 
-        return new ExpenseResource($expense);
+        $expense = $this->expenseRepo->save($expense);
+        return $expense;
     }
 }

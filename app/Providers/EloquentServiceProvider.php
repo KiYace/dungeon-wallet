@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repository\Expense\EloquentExpenseRepository;
+use App\Repository\Expense\ExpenseRepository;
 use App\Repository\Player\EloquentLevelRepository;
 use App\Repository\Player\EloquentPlayerRepository;
 use App\Repository\Player\LevelRepository;
@@ -38,6 +40,10 @@ class EloquentServiceProvider extends ServiceProvider
             [
                 LevelRepository::class,
                 EloquentLevelRepository::class
+            ],
+            [
+                ExpenseRepository::class,
+                EloquentExpenseRepository::class
             ]
         ];
 

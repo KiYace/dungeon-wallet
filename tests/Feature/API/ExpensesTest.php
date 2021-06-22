@@ -18,6 +18,7 @@ class ExpensesTest extends TestCase
         $response = $this->getJson('api/expenses/');
         $response->assertStatus(401);
 
+        $this->mockPlayer();
         $this->createExpense();
         $this->withoutMiddleware();
         $response = $this->getJson('api/expenses/');
