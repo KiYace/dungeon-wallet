@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('expenses', 'App\Http\Controllers\API\ExpensesController@index');
-    Route::post('expenses', 'App\Http\Controllers\API\ExpensesController@store');
+    Route::get('expenses/{bill_id?}', 'App\Http\Controllers\API\ExpensesController@index');
+    Route::post('expenses/', 'App\Http\Controllers\API\ExpensesController@store');
 });

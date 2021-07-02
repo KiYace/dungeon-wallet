@@ -21,10 +21,21 @@ class ExpensesController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/expenses",
+     *     path="/api/expenses/{bill_id}",
      *     summary="Расходы",
      *     tags={"Expenses"},
      *     description="Расходы",
+     *     security={
+     *         {"bearer": {}},
+     *     },
+     *     @OA\Parameter(
+     *         name="bill_id",
+     *         in="path",
+     *         description="id счета",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response="200",
      *         description="Ok",
@@ -37,11 +48,13 @@ class ExpensesController extends Controller
      *         )
      *     )
      * )
+     * @param string $bill_id
      * @throws \Exception
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(string $bill_id): AnonymousResourceCollection
     {
+        print_r($bill_id);
         $ExpensesService = new ExpenseService($this->expenseRepo);
         $ExpensesService->setPlayer(Auth::user());
         return ExpenseResource::collection($ExpensesService->expensesList());
@@ -49,7 +62,7 @@ class ExpensesController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/expenses",
+     *     path="/api/expenses/",
      *     summary="Создание расхода",
      *     tags={"Expenses"},
      *     description="Создание расхода",

@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Repository\Expense\EloquentExpenseRepository;
 use App\Repository\Expense\ExpenseRepository;
+use App\Repository\Player\BalanceRepository;
+use App\Repository\Player\EloquentBalanceRepository;
 use App\Repository\Player\EloquentLevelRepository;
 use App\Repository\Player\EloquentPlayerRepository;
 use App\Repository\Player\LevelRepository;
@@ -24,7 +26,6 @@ class EloquentServiceProvider extends ServiceProvider
     public function register()
     {
         $repositories = [
-            // tag
             [
                 TagRepository::class,
                 EloquentTagRepository::class
@@ -44,6 +45,10 @@ class EloquentServiceProvider extends ServiceProvider
             [
                 ExpenseRepository::class,
                 EloquentExpenseRepository::class
+            ],
+            [
+                BalanceRepository::class,
+                EloquentBalanceRepository::class
             ]
         ];
 

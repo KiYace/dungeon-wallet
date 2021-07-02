@@ -33,6 +33,6 @@ class CreatePlayresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('playres');
+        Schema::dropIfExists('players');
     }
 }

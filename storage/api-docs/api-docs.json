@@ -95,6 +95,107 @@
                 ]
             }
         },
+        "/api/expenses/{bill_id}": {
+            "get": {
+                "tags": [
+                    "Expenses"
+                ],
+                "summary": "Расходы",
+                "description": "Расходы",
+                "operationId": "App\\Http\\Controllers\\API\\ExpensesController::index",
+                "parameters": [
+                    {
+                        "name": "bill_id",
+                        "in": "path",
+                        "description": "id счета",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Expense"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/expenses/": {
+            "post": {
+                "tags": [
+                    "Expenses"
+                ],
+                "summary": "Создание расхода",
+                "description": "Создание расхода",
+                "operationId": "App\\Http\\Controllers\\API\\ExpensesController::store",
+                "requestBody": {
+                    "description": "Pass user credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Название",
+                                        "type": "string"
+                                    },
+                                    "color": {
+                                        "description": "Цвет",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Tag"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/api/player/": {
             "put": {
                 "tags": [
@@ -302,7 +403,54 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/skin/{id}": {
+            "get": {
+                "tags": [
+                    "Skins"
+                ],
+                "summary": "Скин",
+                "description": "Скин",
+                "operationId": "App\\Http\\Controllers\\API\\SkinsController::show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Skin"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
             }
         },
         "/api/tags": {
@@ -491,6 +639,41 @@
     },
     "components": {
         "schemas": {
+            "Expense": {
+                "properties": {
+                    "id": {
+                        "description": "ID",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "description": "Назавние",
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "description": {
+                        "description": "Описание",
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "category_id": {
+                        "description": "ID категории",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "repeat_at": {
+                        "description": "Режим повтора",
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "sum": {
+                        "description": "Сумма",
+                        "type": "integer",
+                        "readOnly": true
+                    }
+                },
+                "type": "object"
+            },
             "Level": {
                 "properties": {
                     "id": {

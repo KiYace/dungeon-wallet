@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePlayresLevelsTable extends Migration
+class CreatePlayerBalanceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreatePlayresLevelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('player_levels', function (Blueprint $table) {
+        Schema::create('player_balance', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('player_id')->index();
-            $table->integer('level')->default(1);
-            $table->integer('exp')->nullable()->default(0);
-            $table->integer('points')->nullable()->default(0);
+            $table->float('balance')->nullable();
+            $table->boolean('main')->default(false);
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreatePlayresLevelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('player_levels');
+        Schema::dropIfExists('player_balance');
     }
 }
